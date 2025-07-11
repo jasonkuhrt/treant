@@ -1,0 +1,25 @@
+{
+  "name": "tree-sitter-graphql-grammar-wasm",
+  "version": "1.0.0",
+  "description": "Pre-built WASM binary for tree-sitter GraphQL grammar",
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/tree-sitter-graphql-grammar-wasm.git"
+  },
+  "keywords": [
+    "tree-sitter",
+    "graphql",
+    "wasm",
+    "grammar",
+    "parser"
+  ],
+  "exports": {
+    "./grammar.wasm": "./grammar.wasm"
+  },
+  "files": [
+    "grammar.wasm",
+    "README.md"
+  ]
+}
