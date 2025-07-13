@@ -4,7 +4,9 @@
     "noEmit": true,
     "module": "NodeNext",
     "target": "ES2020",
-    "moduleResolution": "NodeNext"
+    "moduleResolution": "NodeNext",
+    "types": ["node", "tree-sitter-cli/dsl"]
   },
+  "include": ["tests/**/*", "grammar/**/*"],
   "exclude": ["node_modules", "grammar-js"]
 }
