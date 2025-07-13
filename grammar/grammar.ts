@@ -1,4 +1,16 @@
-module.exports = grammar({
+/// <reference types="tree-sitter-cli/dsl" />
+
+// Global functions available in tree-sitter grammar context
+declare const grammar: any
+declare const choice: any
+declare const optional: any
+declare const repeat1: any
+declare const repeat: any
+declare const seq: any
+declare const prec: any
+declare const token: any
+
+export default grammar({
   name: 'graphql',
 
   extras: ($) => [/[\s\uFEFF\u0009\u0020\u000A\u000D]/, $.comma, $.comment],

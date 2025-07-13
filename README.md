@@ -71,15 +71,25 @@ console.log(tree.rootNode.toString())
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 24+
 - pnpm
 
 ### Setup
 
 ```bash
 pnpm install
-pnpm build
-pnpm test
+pnpm build          # Full build: TypeScript → Parser → WASM
+pnpm check:types    # Type check TypeScript files
+pnpm test           # Run integration tests
+```
+
+### Build Commands
+
+```bash
+pnpm build:grammar  # Compile TypeScript grammar to JavaScript
+pnpm gen:parser     # Generate C parser from compiled grammar
+pnpm build:wasm     # Compile C parser to WASM (requires Docker)
+pnpm build          # Run full build pipeline
 ```
 
 
@@ -89,23 +99,30 @@ pnpm test
 
 ```
 .
-├── grammar.js          # Tree-sitter grammar definition (source)
+├── grammar/            # TypeScript source files
+│   └── grammar.ts      # Tree-sitter grammar definition (TypeScript)
+├── grammar-js/         # Compiled JavaScript (git-ignored)
+│   └── grammar.js      # Compiled grammar for tree-sitter
+├── parser/             # Generated parser files (git-ignored)
+│   └── src/            # Generated C parser source files
 ├── tree-sitter.json    # Tree-sitter project configuration
 ├── grammar.wasm        # Pre-built WASM binary (distributed)
 ├── queries/            # Legacy query files, unused (see below)
-├── src/                # Generated parser files (git-ignored)
+├── tsconfig.json       # TypeScript configuration
+├── tsconfig.build.json # Build-specific TypeScript configuration
 └── tests/              # Integration tests
 ```
 
 ### Flow
 
-1. **Edit Grammar** - Modify `grammar.js` to change the GraphQL parsing rules
-2. **Generate Parser** - Run `tree-sitter generate` which:
-   - Reads `tree-sitter.json` to find the grammar and understand project configuration
-   - Creates C parser code in `src/` (see Project Structure above for details)
-3. **Build WASM** - Run `tree-sitter build --wasm -o grammar.wasm` to compile `src/parser.c` → `grammar.wasm`
-4. **Test** - Run `vitest` to verify the grammar works correctly
-5. **Ship** - Only `grammar.wasm` is published to npm for JavaScript/TypeScript consumers; `src/` is git-ignored
+1. **Edit Grammar** - Modify `grammar/grammar.ts` to change the GraphQL parsing rules (with full TypeScript support)
+2. **Compile TypeScript** - Run `pnpm build:grammar` which compiles `grammar/grammar.ts` → `grammar-js/grammar.js`
+3. **Generate Parser** - Run `pnpm gen:parser` which:
+   - Uses the compiled JavaScript grammar from `grammar-js/grammar.js`
+   - Creates C parser code in `parser/src/` (see Project Structure above for details)
+4. **Build WASM** - Run `pnpm build:wasm` to compile `parser/src/parser.c` → `grammar.wasm` (uses Docker for emscripten)
+5. **Test** - Run `pnpm test` and `pnpm check:types` to verify the grammar works correctly
+6. **Ship** - Only `grammar.wasm` is published to npm for JavaScript/TypeScript consumers; `grammar-js/` and `parser/` are git-ignored
 
 ### Notes
 

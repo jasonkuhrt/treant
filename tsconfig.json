@@ -1,0 +1,16 @@
+{
+  "extends": ["@tsconfig/strictest", "@tsconfig/node24"],
+  "compilerOptions": {
+    "noEmit": true,
+    "verbatimModuleSyntax": false,
+    "module": "ESNext",
+    "target": "ES2020",
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "noImplicitAny": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
+  },
+  "include": ["tests/**/*", "grammar/**/*"],
+  "exclude": ["node_modules", "parser"]
+}
