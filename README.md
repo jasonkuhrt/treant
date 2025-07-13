@@ -38,7 +38,3 @@ console.log(tree.rootNode.toString())
 ## Credits
 
 This package provides a pre-built WASM binary of the [tree-sitter-graphql](https://github.com/bkegley/tree-sitter-graphql) grammar.
-
-## License
-
-MIT
