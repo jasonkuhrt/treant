@@ -28,5 +28,8 @@ jobs:
       - name: Build WASM
         run: pnpm run build
       
+      - name: Type check
+        run: pnpm check:types
+      
       - name: Run tests
         run: pnpm test
