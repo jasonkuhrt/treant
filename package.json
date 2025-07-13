@@ -15,11 +15,25 @@
     "grammar",
     "parser"
   ],
+  "scripts": {
+    "gen": "pnpm run '/^gen:.*/'",
+    "gen:parser": "tree-sitter generate",
+    "prebuild:wasm": "pnpm run gen:parser",
+    "build:wasm": "tree-sitter build --wasm -o grammar.wasm",
+    "build": "pnpm run build:wasm",
+    "pretest": "test -f grammar.wasm || pnpm run build",
+    "test": "vitest"
+  },
   "exports": {
     "./grammar.wasm": "./grammar.wasm"
   },
   "files": [
     "grammar.wasm",
     "README.md"
-  ]
+  ],
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.8",
+    "vitest": "^3.2.4",
+    "web-tree-sitter": "^0.25.8"
+  }
 }

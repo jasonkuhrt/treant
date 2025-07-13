@@ -1,0 +1,210 @@
+# Schema definition with description
+"The root schema definition"
+schema {
+  query: Query
+  mutation: Mutation
+  subscription: Subscription
+}
+
+# Scalar type definition
+"A custom date scalar"
+scalar Date @specifiedBy(url: "https://example.com/date")
+
+# Enum type definition
+"Order status enumeration"
+enum OrderStatus @deprecated(reason: "Use OrderState instead") {
+  "Order is pending"
+  PENDING
+  "Order is processing"
+  PROCESSING @deprecated
+  "Order is completed"
+  COMPLETED
+}
+
+# Interface type definition
+"Node interface for relay compatibility"
+interface Node {
+  "Unique identifier"
+  id: ID!
+}
+
+# Union type definition
+"Search results can be different types"
+union SearchResult = User | Post | Comment
+
+# Input object type definition
+"Input for creating a user"
+input CreateUserInput {
+  name: String!
+  email: String!
+  age: Int
+  tags: [String!]
+  metadata: JSON
+}
+
+# Object type definition with interfaces
+"User type implementing Node"
+type User implements Node & Entity {
+  id: ID!
+  name: String!
+  email: String! @deprecated(reason: "Use emails field")
+  emails: [String!]!
+  posts(first: Int = 10, after: String): PostConnection!
+  profile: UserProfile
+  createdAt: Date!
+}
+
+# Object type with field arguments
+type Query {
+  # Field with default argument
+  users(limit: Int = 20, offset: Int = 0): [User!]!
+  
+  # Field with complex arguments
+  search(
+    query: String!
+    filters: SearchFilters
+    options: SearchOptions = { limit: 10, includeArchived: false }
+  ): SearchResult!
+  
+  # Field returning nullable
+  node(id: ID!): Node
+  
+  # Field with list arguments
+  usersByIds(ids: [ID!]!): [User]!
+}
+
+# Type with directive
+type Mutation @rateLimit(max: 100, window: "1h") {
+  createUser(input: CreateUserInput!): CreateUserPayload!
+  updateUser(id: ID!, input: UpdateUserInput!): User
+  deleteUser(id: ID!): Boolean!
+}
+
+# Type extension
+extend type User @key(fields: "id") {
+  followers: [User!]!
+  following: [User!]!
+}
+
+# Schema extension
+extend schema {
+  query: Query
+}
+
+# Directive definition
+"Custom directive for field validation"
+directive @validate(
+  pattern: String
+  min: Int
+  max: Int
+) repeatable on FIELD_DEFINITION | ARGUMENT_DEFINITION | INPUT_FIELD_DEFINITION
+
+# Directive on multiple locations
+directive @auth(
+  requires: Role = USER
+) on FIELD_DEFINITION | OBJECT | INTERFACE
+
+# Fragment definition
+fragment UserFields on User {
+  id
+  name
+  email
+  profile {
+    ...ProfileFields
+  }
+}
+
+fragment ProfileFields on UserProfile {
+  bio
+  avatarUrl
+  location
+}
+
+# Query operation with variables
+query GetUser($id: ID!, $includeProfile: Boolean! = true) @cached(ttl: 300) {
+  user(id: $id) {
+    ...UserFields
+    
+    # Inline fragment with type condition
+    ... on User @include(if: $includeProfile) {
+      profile {
+        bio
+      }
+    }
+    
+    # Field alias
+    primaryEmail: email
+    
+    # Field with arguments and directives
+    posts(first: 5) @connection(key: "userPosts") {
+      edges {
+        node {
+          id
+          title
+        }
+      }
+    }
+  }
+}
+
+# Mutation operation
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      id
+      name
+    }
+    errors {
+      field
+      message
+    }
+  }
+}
+
+# Subscription operation
+subscription OnCommentAdded($postId: ID!) {
+  commentAdded(postId: $postId) {
+    id
+    content
+    author {
+      name
+    }
+    createdAt
+  }
+}
+
+# Anonymous query operation
+{
+  users {
+    id
+    name
+  }
+}
+
+# Query with fragments spread
+query ComplexQuery {
+  users {
+    ...UserFields
+    ...on User {
+      email
+    }
+  }
+}
+
+# Variable definitions with default values
+query SearchQuery(
+  $query: String! = "default"
+  $filters: SearchFilters = { status: ACTIVE }
+  $includeArchived: Boolean = false
+) {
+  search(query: $query, options: { includeArchived: $includeArchived }) {
+    __typename
+    ... on User {
+      name
+    }
+    ... on Post {
+      title
+      content
+    }
+  }
+}
