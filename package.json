@@ -19,11 +19,11 @@
   "scripts": {
     "gen": "pnpm run '/^gen:.*/'",
     "pregen:parser": "pnpm build:grammar",
-    "gen:parser": "tree-sitter generate --output parser/src grammar-js/grammar.js",
-    "postgen:parser": "pnpm gen:grammar-types",
-    "gen:grammar-types": "tsx scripts/gen-grammar-types.ts",
+    "gen:parser": "tree-sitter generate --output parser/src grammar-definition-js/grammar.js",
+    "postgen:parser": "pnpm gen:grammar-lib",
+    "gen:grammar-lib": "tsx scripts/gen-grammar-lib.ts",
     "prebuild:wasm": "pnpm run gen:parser",
-    "build:grammar": "tsc --project tsconfig.build.json",
+    "build:grammar": "tsc --project tsconfig.build.json --noCheck",
     "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",
     "build": "pnpm build:wasm",
     "check:types": "tsc --noEmit",
@@ -33,13 +33,24 @@
     "test": "vitest"
   },
   "exports": {
+    ".": "./grammar-lib/$.js",
     "./grammar.wasm": "./grammar.wasm"
   },
   "files": [
     "grammar.wasm",
+    "grammar-lib",
     "README.md"
   ],
+  "peerDependencies": {
+    "web-tree-sitter": "^0.25.0"
+  },
+  "peerDependenciesMeta": {
+    "web-tree-sitter": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@dprint/formatter": "^0.4.1",
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.10.5",

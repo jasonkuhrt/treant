@@ -2,5 +2,6 @@ node_modules
 .DS_Store
 parser/
 tree-sitter-*.wasm
-grammar-js
-grammar/types.generated.ts
+grammar-definition-js
+grammar-definition/types.generated.ts
+grammar-lib

@@ -2,8 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": false,
-    "rootDir": "grammar",
-    "outDir": "grammar-js"
+    "rootDir": "grammar-definition",
+    "outDir": "grammar-definition-js"
   },
-  "include": ["grammar"]
+  "include": ["grammar-definition"]
 }

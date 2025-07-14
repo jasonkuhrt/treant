@@ -1,4 +1,6 @@
-import type { RuleName } from './types.generated.js';
+declare global {
+  type RuleName = import('../grammar-lib/$.js').TreeSitterGraphQL.Node['type'];
+}
 
 export default grammar({
   name: 'graphql',

@@ -8,6 +8,6 @@
     "types": ["node", "tree-sitter-cli/dsl"],
     "resolveJsonModule": true
   },
-  "include": ["tests/**/*", "grammar/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "grammar-js"]
+  "include": ["tests/**/*", "grammar-definition/**/*", "scripts/**/*"],
+  "exclude": ["node_modules", "grammar-definition-js"]
 }

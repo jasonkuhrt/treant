@@ -8,6 +8,9 @@ importers:
 
   .:
     devDependencies:
+      '@dprint/formatter':
+        specifier: ^0.4.1
+        version: 0.4.1
       '@tsconfig/node24':
         specifier: ^24.0.1
         version: 24.0.1
@@ -47,6 +50,9 @@ packages:
     resolution: {integrity: sha512-PcY75U3UC/0CLOxWzE0zZJZ2PxzUM5AX2baYL1ovgDGCfqO1H0hINiyxfx/8ncGgPojWBkLs+zrcFiGnXx7BQg==}
     cpu: [x64]
     os: [darwin]
+
+  '@dprint/formatter@0.4.1':
+    resolution: {integrity: sha512-IB/GXdlMOvi0UhQQ9mcY15Fxcrc2JPadmo6tqefCNV0bptFq7YBpggzpqYXldBXDa04CbKJ+rDwO2eNRPE2+/g==}
 
   '@dprint/linux-arm64-glibc@0.50.1':
     resolution: {integrity: sha512-q0TOGy9FsoSKsEQ4sIMKyFweF5M8rW1S5OfwJDNRR2TU2riWByU9TKYIZUzg53iuwYKRypr/kJ5kdbl516afRQ==}
@@ -640,6 +646,8 @@ snapshots:
 
   '@dprint/darwin-x64@0.50.1':
     optional: true
+
+  '@dprint/formatter@0.4.1': {}
 
   '@dprint/linux-arm64-glibc@0.50.1':
     optional: true

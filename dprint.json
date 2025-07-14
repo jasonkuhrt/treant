@@ -7,7 +7,7 @@
   ],
   "excludes": [
     "node_modules",
-    "grammar-js",
+    "grammar-definition-js",
     "parser"
   ],
   "plugins": [
