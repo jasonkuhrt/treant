@@ -20,6 +20,8 @@
     "gen": "pnpm run '/^gen:.*/'",
     "pregen:parser": "pnpm build:grammar",
     "gen:parser": "tree-sitter generate --output parser/src grammar-js/grammar.js",
+    "postgen:parser": "pnpm gen:grammar-types",
+    "gen:grammar-types": "tsx scripts/gen-grammar-types.ts",
     "prebuild:wasm": "pnpm run gen:parser",
     "build:grammar": "tsc --project tsconfig.build.json",
     "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",

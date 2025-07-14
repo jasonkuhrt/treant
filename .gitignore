@@ -3,3 +3,4 @@ node_modules
 parser/
 tree-sitter-*.wasm
 grammar-js
+grammar/types.generated.ts
