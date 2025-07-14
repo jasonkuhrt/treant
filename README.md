@@ -13,19 +13,24 @@ npm install tree-sitter-graphql-grammar-wasm
 ### NodeJS
 
 ```typescript
-import { readFileSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
-import { Parser, Language } from 'web-tree-sitter'
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { Language, Parser } from 'web-tree-sitter';
 
 // Initialize the parser
-await Parser.init()
-const parser = new Parser()
+await Parser.init();
+const parser = new Parser();
 
 // Load the GraphQL grammar
-const wasmPath = fileURLToPath(new URL('./node_modules/tree-sitter-graphql-grammar-wasm/grammar.wasm', import.meta.url))
-const wasmBuffer = readFileSync(wasmPath)
-const GraphQL = await Language.load(wasmBuffer)
-parser.setLanguage(GraphQL)
+const wasmPath = fileURLToPath(
+  new URL(
+    './node_modules/tree-sitter-graphql-grammar-wasm/grammar.wasm',
+    import.meta.url,
+  ),
+);
+const wasmBuffer = readFileSync(wasmPath);
+const GraphQL = await Language.load(wasmBuffer);
+parser.setLanguage(GraphQL);
 
 // Parse GraphQL code
 const tree = parser.parse(`
@@ -35,24 +40,24 @@ const tree = parser.parse(`
       email
     }
   }
-`)
+`);
 
-console.log(tree.rootNode.toString())
+console.log(tree.rootNode.toString());
 ```
 
 ### Vite
 
 ```typescript
-import grammarUrl from 'tree-sitter-graphql-grammar-wasm/grammar.wasm?url'
-import { Parser, Language } from 'web-tree-sitter'
+import grammarUrl from 'tree-sitter-graphql-grammar-wasm/grammar.wasm?url';
+import { Language, Parser } from 'web-tree-sitter';
 
 // Initialize the parser
-await Parser.init()
-const parser = new Parser()
+await Parser.init();
+const parser = new Parser();
 
 // Load the GraphQL grammar
-const GraphQL = await Language.load(grammarUrl)
-parser.setLanguage(GraphQL)
+const GraphQL = await Language.load(grammarUrl);
+parser.setLanguage(GraphQL);
 
 // Parse GraphQL code
 const tree = parser.parse(`
@@ -62,9 +67,9 @@ const tree = parser.parse(`
       email
     }
   }
-`)
+`);
 
-console.log(tree.rootNode.toString())
+console.log(tree.rootNode.toString());
 ```
 
 ## Development
@@ -91,7 +96,6 @@ pnpm gen:parser     # Generate C parser from compiled grammar
 pnpm build:wasm     # Compile C parser to WASM (requires Docker)
 pnpm build          # Run full build pipeline
 ```
-
 
 ## Architecture
 

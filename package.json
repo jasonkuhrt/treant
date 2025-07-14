@@ -25,6 +25,8 @@
     "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",
     "build": "pnpm build:wasm",
     "check:types": "tsc --noEmit",
+    "format": "dprint fmt",
+    "format:check": "dprint check",
     "pretest": "test -f grammar.wasm || pnpm run build",
     "test": "vitest"
   },
@@ -39,6 +41,7 @@
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.10.5",
+    "dprint": "^0.50.1",
     "tree-sitter-cli": "^0.25.8",
     "tsx": "^4.20.3",
     "typescript": "^5.7.3",

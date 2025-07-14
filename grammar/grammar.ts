@@ -1,21 +1,119 @@
+/**
+ * Union type containing all rule names in this grammar.
+ *
+ * IMPORTANT: This type must be kept in sync with the actual rule names in the `rules` object below.
+ *
+ * Purpose:
+ * - Provides type safety for the `$` parameter in rule functions
+ * - Enables IntelliSense/autocomplete for `$.rule_name` references
+ * - Catches typos in rule references at compile time
+ *
+ * Usage:
+ * - Replace `$: any` with `$: GrammarSymbols<RuleName>` in rule functions
+ * - When adding/removing/renaming rules, update this type accordingly
+ *
+ * Trade-offs:
+ * - ✅ Full type safety and IDE support
+ * - ❌ Manual maintenance required (circular dependency)
+ * - ❌ Must keep type and rules object in sync
+ *
+ * Alternative: Use `$: any` for simpler maintenance but no type safety
+ */
+type RuleName =
+  | 'source_file'
+  | 'document'
+  | 'definition'
+  | 'executable_definition'
+  | 'type_system_definition'
+  | 'type_system_extension'
+  | 'schema_definition'
+  | 'schema_extension'
+  | 'type_extension'
+  | 'scalar_type_extension'
+  | 'object_type_extension'
+  | 'interface_type_extension'
+  | 'union_type_extension'
+  | 'enum_type_extension'
+  | 'input_object_type_extension'
+  | 'input_fields_definition'
+  | 'enum_values_definition'
+  | 'enum_value_definition'
+  | 'implements_interfaces'
+  | 'fields_definition'
+  | 'field_definition'
+  | 'arguments_definition'
+  | 'input_value_definition'
+  | 'default_value'
+  | 'union_member_types'
+  | 'root_operation_type_definition'
+  | 'operation_definition'
+  | 'operation_type'
+  | 'type_definition'
+  | 'scalar_type_definition'
+  | 'object_type_definition'
+  | 'interface_type_definition'
+  | 'union_type_definition'
+  | 'enum_type_definition'
+  | 'input_object_type_definition'
+  | 'variable_definitions'
+  | 'variable_definition'
+  | 'selection_set'
+  | 'selection'
+  | 'field'
+  | 'alias'
+  | 'arguments'
+  | 'argument'
+  | 'value'
+  | 'variable'
+  | 'string_value'
+  | 'int_value'
+  | 'float_value'
+  | 'boolean_value'
+  | 'null_value'
+  | 'enum_value'
+  | 'list_value'
+  | 'object_value'
+  | 'object_field'
+  | 'fragment_spread'
+  | 'fragment_definition'
+  | 'fragment_name'
+  | 'inline_fragment'
+  | 'type_condition'
+  | 'directives'
+  | 'directive'
+  | 'directive_definition'
+  | 'directive_locations'
+  | 'directive_location'
+  | 'executable_directive_location'
+  | 'type_system_directive_location'
+  | 'type'
+  | 'named_type'
+  | 'list_type'
+  | 'non_null_type'
+  | 'name'
+  | 'comment'
+  | 'comma'
+  | 'description';
+
 export default grammar({
   name: 'graphql',
 
-  extras: ($: any) => [/[\s\uFEFF\u0009\u0020\u000A\u000D]/, $.comma, $.comment],
+  extras: ($: GrammarSymbols<RuleName>) => [/[\s\uFEFF\u0009\u0020\u000A\u000D]/, $.comma, $.comment],
 
   rules: {
-    source_file: ($: any) => $.document,
-    document: ($: any) => repeat1($.definition),
-    definition: ($: any) =>
+    source_file: ($: GrammarSymbols<RuleName>) => $.document,
+    document: ($: GrammarSymbols<RuleName>) => repeat1($.definition),
+    definition: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.executable_definition,
         $.type_system_definition,
         $.type_system_extension,
       ),
-    executable_definition: ($: any) => choice($.operation_definition, $.fragment_definition),
-    type_system_definition: ($: any) => choice($.schema_definition, $.type_definition, $.directive_definition),
-    type_system_extension: ($: any) => choice($.schema_extension, $.type_extension),
-    schema_definition: ($: any) =>
+    executable_definition: ($: GrammarSymbols<RuleName>) => choice($.operation_definition, $.fragment_definition),
+    type_system_definition: ($: GrammarSymbols<RuleName>) =>
+      choice($.schema_definition, $.type_definition, $.directive_definition),
+    type_system_extension: ($: GrammarSymbols<RuleName>) => choice($.schema_extension, $.type_extension),
+    schema_definition: ($: GrammarSymbols<RuleName>) =>
       seq(
         optional($.description),
         'schema',
@@ -24,7 +122,7 @@ export default grammar({
         repeat1($.root_operation_type_definition),
         '}',
       ),
-    schema_extension: ($: any) =>
+    schema_extension: ($: GrammarSymbols<RuleName>) =>
       seq(
         'extend',
         'schema',
@@ -33,7 +131,7 @@ export default grammar({
         $.root_operation_type_definition,
         '}',
       ),
-    type_extension: ($: any) =>
+    type_extension: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.scalar_type_extension,
         $.object_type_extension,
@@ -42,8 +140,8 @@ export default grammar({
         $.enum_type_extension,
         $.input_object_type_extension,
       ),
-    scalar_type_extension: ($: any) => seq('extend', 'scalar', $.name, $.directives),
-    object_type_extension: ($: any) =>
+    scalar_type_extension: ($: GrammarSymbols<RuleName>) => seq('extend', 'scalar', $.name, $.directives),
+    object_type_extension: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         choice(
           seq(
@@ -63,7 +161,7 @@ export default grammar({
           ),
         ),
       ),
-    interface_type_extension: ($: any) =>
+    interface_type_extension: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         choice(
           seq(
@@ -83,7 +181,7 @@ export default grammar({
           ),
         ),
       ),
-    union_type_extension: ($: any) =>
+    union_type_extension: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         choice(
           seq(
@@ -96,7 +194,7 @@ export default grammar({
           seq('extend', 'union', $.name, optional($.directives)),
         ),
       ),
-    enum_type_extension: ($: any) =>
+    enum_type_extension: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         choice(
           seq(
@@ -109,7 +207,7 @@ export default grammar({
           seq('extend', 'enum', $.name, optional($.directives)),
         ),
       ),
-    input_object_type_extension: ($: any) =>
+    input_object_type_extension: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         choice(
           seq(
@@ -122,16 +220,17 @@ export default grammar({
           seq('extend', 'input', $.name, optional($.directives)),
         ),
       ),
-    input_fields_definition: ($: any) => seq('{', repeat1($.input_value_definition), '}'),
-    enum_values_definition: ($: any) => seq('{', repeat1($.enum_value_definition), '}'),
-    enum_value_definition: ($: any) => seq(optional($.description), $.enum_value, optional($.directives)),
-    implements_interfaces: ($: any) =>
+    input_fields_definition: ($: GrammarSymbols<RuleName>) => seq('{', repeat1($.input_value_definition), '}'),
+    enum_values_definition: ($: GrammarSymbols<RuleName>) => seq('{', repeat1($.enum_value_definition), '}'),
+    enum_value_definition: ($: GrammarSymbols<RuleName>) =>
+      seq(optional($.description), $.enum_value, optional($.directives)),
+    implements_interfaces: ($: GrammarSymbols<RuleName>) =>
       choice(
         seq($.implements_interfaces, '&', $.named_type),
         seq('implements', optional('&'), $.named_type),
       ),
-    fields_definition: ($: any) => seq('{', repeat1($.field_definition), '}'),
-    field_definition: ($: any) =>
+    fields_definition: ($: GrammarSymbols<RuleName>) => seq('{', repeat1($.field_definition), '}'),
+    field_definition: ($: GrammarSymbols<RuleName>) =>
       seq(
         optional($.description),
         $.name,
@@ -140,8 +239,8 @@ export default grammar({
         $.type,
         optional($.directives),
       ),
-    arguments_definition: ($: any) => seq('(', repeat1($.input_value_definition), ')'),
-    input_value_definition: ($: any) =>
+    arguments_definition: ($: GrammarSymbols<RuleName>) => seq('(', repeat1($.input_value_definition), ')'),
+    input_value_definition: ($: GrammarSymbols<RuleName>) =>
       seq(
         optional($.description),
         $.name,
@@ -150,14 +249,14 @@ export default grammar({
         optional($.default_value),
         optional($.directives),
       ),
-    default_value: ($: any) => seq('=', $.value),
-    union_member_types: ($: any) =>
+    default_value: ($: GrammarSymbols<RuleName>) => seq('=', $.value),
+    union_member_types: ($: GrammarSymbols<RuleName>) =>
       choice(
         seq($.union_member_types, '|', $.named_type),
         seq('=', optional('|'), $.named_type),
       ),
-    root_operation_type_definition: ($: any) => seq($.operation_type, ':', $.named_type),
-    operation_definition: ($: any) =>
+    root_operation_type_definition: ($: GrammarSymbols<RuleName>) => seq($.operation_type, ':', $.named_type),
+    operation_definition: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.selection_set,
         seq(
@@ -168,8 +267,8 @@ export default grammar({
           $.selection_set,
         ),
       ),
-    operation_type: (_$: any) => choice('query', 'mutation', 'subscription'),
-    type_definition: ($: any) =>
+    operation_type: () => choice('query', 'mutation', 'subscription'),
+    type_definition: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.scalar_type_definition,
         $.object_type_definition,
@@ -178,11 +277,11 @@ export default grammar({
         $.enum_type_definition,
         $.input_object_type_definition,
       ),
-    scalar_type_definition: ($: any) =>
+    scalar_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(optional($.description), 'scalar', $.name, optional($.directives)),
       ),
-    object_type_definition: ($: any) =>
+    object_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(
           optional($.description),
@@ -193,7 +292,7 @@ export default grammar({
           optional($.fields_definition),
         ),
       ),
-    interface_type_definition: ($: any) =>
+    interface_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(
           optional($.description),
@@ -204,7 +303,7 @@ export default grammar({
           optional($.fields_definition),
         ),
       ),
-    union_type_definition: ($: any) =>
+    union_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(
           optional($.description),
@@ -214,7 +313,7 @@ export default grammar({
           optional($.union_member_types),
         ),
       ),
-    enum_type_definition: ($: any) =>
+    enum_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(
           optional($.description),
@@ -224,7 +323,7 @@ export default grammar({
           optional($.enum_values_definition),
         ),
       ),
-    input_object_type_definition: ($: any) =>
+    input_object_type_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         seq(
           optional($.description),
@@ -234,8 +333,8 @@ export default grammar({
           optional($.input_fields_definition),
         ),
       ),
-    variable_definitions: ($: any) => seq('(', repeat1($.variable_definition), ')'),
-    variable_definition: ($: any) =>
+    variable_definitions: ($: GrammarSymbols<RuleName>) => seq('(', repeat1($.variable_definition), ')'),
+    variable_definition: ($: GrammarSymbols<RuleName>) =>
       seq(
         $.variable,
         ':',
@@ -244,9 +343,9 @@ export default grammar({
         optional($.directives),
         optional($.comma),
       ),
-    selection_set: ($: any) => seq('{', repeat1($.selection), '}'),
-    selection: ($: any) => choice($.field, $.inline_fragment, $.fragment_spread),
-    field: ($: any) =>
+    selection_set: ($: GrammarSymbols<RuleName>) => seq('{', repeat1($.selection), '}'),
+    selection: ($: GrammarSymbols<RuleName>) => choice($.field, $.inline_fragment, $.fragment_spread),
+    field: ($: GrammarSymbols<RuleName>) =>
       seq(
         optional($.alias),
         $.name,
@@ -254,10 +353,10 @@ export default grammar({
         optional($.directive),
         optional($.selection_set),
       ),
-    alias: ($: any) => seq($.name, ':'),
-    arguments: ($: any) => seq('(', repeat1($.argument), ')'),
-    argument: ($: any) => seq($.name, ':', $.value),
-    value: ($: any) =>
+    alias: ($: GrammarSymbols<RuleName>) => seq($.name, ':'),
+    arguments: ($: GrammarSymbols<RuleName>) => seq('(', repeat1($.argument), ')'),
+    argument: ($: GrammarSymbols<RuleName>) => seq($.name, ':', $.value),
+    value: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.variable,
         $.string_value,
@@ -269,14 +368,14 @@ export default grammar({
         $.list_value,
         $.object_value,
       ),
-    variable: ($: any) => seq('$', $.name),
-    string_value: (_$: any) =>
+    variable: ($: GrammarSymbols<RuleName>) => seq('$', $.name),
+    string_value: () =>
       choice(
         seq('"""', /([^"]|\n|""?[^"])*/, '"""'),
         seq('"', /[^"\\\n]*/, '"'),
       ),
-    int_value: (_$: any) => /-?(0|[1-9][0-9]*)/,
-    float_value: (_$: any) =>
+    int_value: () => /-?(0|[1-9][0-9]*)/,
+    float_value: () =>
       token(
         seq(
           /-?(0|[1-9][0-9]*)/,
@@ -287,14 +386,14 @@ export default grammar({
           ),
         ),
       ),
-    boolean_value: (_$: any) => choice('true', 'false'),
-    null_value: (_$: any) => 'null',
-    enum_value: ($: any) => $.name,
-    list_value: ($: any) => seq('[', repeat($.value), ']'),
-    object_value: ($: any) => seq('{', repeat($.object_field), '}'),
-    object_field: ($: any) => seq($.name, ':', $.value, optional($.comma)),
-    fragment_spread: ($: any) => seq('...', $.fragment_name, optional($.directives)),
-    fragment_definition: ($: any) =>
+    boolean_value: () => choice('true', 'false'),
+    null_value: () => 'null',
+    enum_value: ($: GrammarSymbols<RuleName>) => $.name,
+    list_value: ($: GrammarSymbols<RuleName>) => seq('[', repeat($.value), ']'),
+    object_value: ($: GrammarSymbols<RuleName>) => seq('{', repeat($.object_field), '}'),
+    object_field: ($: GrammarSymbols<RuleName>) => seq($.name, ':', $.value, optional($.comma)),
+    fragment_spread: ($: GrammarSymbols<RuleName>) => seq('...', $.fragment_name, optional($.directives)),
+    fragment_definition: ($: GrammarSymbols<RuleName>) =>
       seq(
         'fragment',
         $.fragment_name,
@@ -302,18 +401,18 @@ export default grammar({
         optional($.directives),
         $.selection_set,
       ),
-    fragment_name: ($: any) => $.name,
-    inline_fragment: ($: any) =>
+    fragment_name: ($: GrammarSymbols<RuleName>) => $.name,
+    inline_fragment: ($: GrammarSymbols<RuleName>) =>
       seq(
         '...',
         optional($.type_condition),
         optional($.directives),
         $.selection_set,
       ),
-    type_condition: ($: any) => seq('on', $.named_type),
-    directives: ($: any) => repeat1($.directive),
-    directive: ($: any) => seq('@', $.name, optional($.arguments)),
-    directive_definition: ($: any) =>
+    type_condition: ($: GrammarSymbols<RuleName>) => seq('on', $.named_type),
+    directives: ($: GrammarSymbols<RuleName>) => repeat1($.directive),
+    directive: ($: GrammarSymbols<RuleName>) => seq('@', $.name, optional($.arguments)),
+    directive_definition: ($: GrammarSymbols<RuleName>) =>
       prec.right(
         1,
         seq(
@@ -327,13 +426,14 @@ export default grammar({
           $.directive_locations,
         ),
       ),
-    directive_locations: ($: any) =>
+    directive_locations: ($: GrammarSymbols<RuleName>) =>
       choice(
         seq($.directive_locations, '|', $.directive_location),
         seq(optional('|'), $.directive_location),
       ),
-    directive_location: ($: any) => choice($.executable_directive_location, $.type_system_directive_location),
-    executable_directive_location: (_$: any) =>
+    directive_location: ($: GrammarSymbols<RuleName>) =>
+      choice($.executable_directive_location, $.type_system_directive_location),
+    executable_directive_location: () =>
       choice(
         'QUERY',
         'MUTATION',
@@ -344,7 +444,7 @@ export default grammar({
         'INLINE_FRAGMENT',
         'VARIABLE_DEFINITION',
       ),
-    type_system_directive_location: (_$: any) =>
+    type_system_directive_location: () =>
       choice(
         'SCHEMA',
         'SCALAR',
@@ -358,13 +458,13 @@ export default grammar({
         'INPUT_OBJECT',
         'INPUT_FIELD_DEFINITION',
       ),
-    type: ($: any) => choice($.named_type, $.list_type, $.non_null_type),
-    named_type: ($: any) => $.name,
-    list_type: ($: any) => seq('[', $.type, ']'),
-    non_null_type: ($: any) => choice(seq($.named_type, '!'), seq($.list_type, '!')),
-    name: (_$: any) => /[_A-Za-z][_0-9A-Za-z]*/,
-    comment: (_$: any) => token(seq('#', /.*/)),
-    comma: (_$: any) => ',',
-    description: ($: any) => $.string_value,
+    type: ($: GrammarSymbols<RuleName>) => choice($.named_type, $.list_type, $.non_null_type),
+    named_type: ($: GrammarSymbols<RuleName>) => $.name,
+    list_type: ($: GrammarSymbols<RuleName>) => seq('[', $.type, ']'),
+    non_null_type: ($: GrammarSymbols<RuleName>) => choice(seq($.named_type, '!'), seq($.list_type, '!')),
+    name: () => /[_A-Za-z][_0-9A-Za-z]*/,
+    comment: () => token(seq('#', /.*/)),
+    comma: () => ',',
+    description: ($: GrammarSymbols<RuleName>) => $.string_value,
   },
-})
+});
