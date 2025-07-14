@@ -26,6 +26,7 @@
     "build:grammar": "tsc --project tsconfig.build.json --noCheck",
     "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",
     "build": "pnpm build:wasm",
+    "prepack": "pnpm build",
     "check:types": "tsc --noEmit",
     "format": "dprint fmt",
     "format:check": "dprint check",
