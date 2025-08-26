@@ -5,3 +5,4 @@ tree-sitter-*.wasm
 grammar-definition-js
 grammar-definition/types.generated.ts
 grammar-lib
+grammar-lib-build

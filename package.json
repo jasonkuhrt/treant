@@ -21,25 +21,31 @@
     "pregen:parser": "pnpm build:grammar",
     "gen:parser": "tree-sitter generate --output parser/src grammar-definition-js/grammar.js",
     "postgen:parser": "pnpm gen:grammar-lib",
-    "gen:grammar-lib": "tsx scripts/gen-grammar-lib.ts",
+    "gen:grammar-lib": "tsx scripts/gen-grammar-lib.ts --name GraphQL",
+    "prebuild:grammar-lib": "pnpm gen:grammar-lib && mkdir -p grammar-lib/parser/src && cp parser/src/grammar.json grammar-lib/parser/src/",
+    "build:grammar-lib": "tsc --project tsconfig.build.grammar-lib.json",
     "prebuild:wasm": "pnpm run gen:parser",
     "build:grammar": "tsc --project tsconfig.build.json --noCheck",
     "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",
-    "build": "pnpm build:wasm",
+    "build": "pnpm build:wasm && pnpm build:grammar-lib",
     "prepack": "pnpm build",
     "check:types": "tsc --noEmit",
     "format": "dprint fmt",
     "format:check": "dprint check",
     "pretest": "test -f grammar.wasm || pnpm run build",
-    "test": "vitest"
+    "test": "vitest",
+    "test:runtime": "vitest",
+    "test:types": "tsc --noEmit"
   },
   "exports": {
-    ".": "./grammar-lib/$.js",
-    "./grammar.wasm": "./grammar.wasm"
+    ".": "./grammar-lib-build/$.js",
+    "./grammar.wasm": "./grammar.wasm",
+    "./tree-sitter-graphql": "./grammar-lib-build/$.js"
   },
   "files": [
     "grammar.wasm",
     "grammar-lib",
+    "grammar-lib-build",
     "README.md"
   ],
   "peerDependencies": {
@@ -55,6 +61,7 @@
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^22.10.5",
+    "@wollybeard/kit": "^0.41.0",
     "dprint": "^0.50.1",
     "tree-sitter-cli": "^0.25.8",
     "tsx": "^4.20.3",

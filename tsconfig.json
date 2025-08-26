@@ -3,11 +3,13 @@
   "compilerOptions": {
     "noEmit": true,
     "module": "NodeNext",
-    "target": "ES2020",
+    "target": "ES2022",
     "moduleResolution": "NodeNext",
     "types": ["node", "tree-sitter-cli/dsl"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false
   },
-  "include": ["tests/**/*", "grammar-definition/**/*", "scripts/**/*"],
+  "include": ["grammar-lib-tests/**/*", "grammar-definition/**/*", "scripts/**/*"],
   "exclude": ["node_modules", "grammar-definition-js"]
 }

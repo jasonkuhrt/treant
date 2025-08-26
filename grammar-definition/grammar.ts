@@ -1,15 +1,15 @@
 declare global {
-  type RuleName = import('../grammar-lib/$.js').TreeSitterGraphQL.Node['type'];
+  type RuleName = import('../grammar-lib/$.js').TreeSitterGraphQL.Node.Group.Named['type'];
 }
 
 export default grammar({
   name: 'graphql',
 
-  extras: ($: GrammarSymbols<RuleName>) => [/[\s\uFEFF\u0009\u0020\u000A\u000D]/, $.comma, $.comment],
+  extras: ($: GrammarSymbols<RuleName>) => [/[\s\uFEFF\u0009\u0020\u000A\u000D]/, $['comma'], $['comment']],
 
   rules: {
-    source_file: ($: GrammarSymbols<RuleName>) => $.document,
-    document: ($: GrammarSymbols<RuleName>) => repeat1($.definition),
+    source_file: ($: GrammarSymbols<RuleName>) => $['document'],
+    document: ($: GrammarSymbols<RuleName>) => repeat1($['definition']),
     definition: ($: GrammarSymbols<RuleName>) =>
       choice(
         $.executable_definition,
