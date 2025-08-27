@@ -26,7 +26,7 @@
   },
   "scripts": {
     "generate": "treant --grammar graphql",
-    "build": "tsc --project tsconfig.json",
+    "build": "pnpm run generate && tsc --project tsconfig.json",
     "test": "vitest",
     "test:types": "tsc --noEmit"
   },

@@ -4,25 +4,10 @@
  * Pure functions for building TypeScript syntax without string concatenation
  */
 
-// ============= Naming Convention Helpers =============
+import { toPascalCase } from '../case.js';
 
-/**
- * Convert snake_case or kebab-case to PascalCase
- */
-export function toPascalCase(str: string): string {
-  return str
-    .split(/[-_]/)
-    .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-    .join('');
-}
-
-/**
- * Convert snake_case or kebab-case to camelCase
- */
-export function toCamelCase(str: string): string {
-  const pascal = toPascalCase(str);
-  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
-}
+// Re-export case utilities for convenience
+export { toPascalCase } from '../case.js';
 
 /**
  * Check if a string is a valid TypeScript identifier
@@ -41,12 +26,12 @@ export function isValidTypeScriptIdentifier(name: string): boolean {
  */
 export function getNodeInterfaceName(nodeType: string): string {
   const pascalType = toPascalCase(nodeType);
-  
+
   // Add $ suffix if the resulting name would be an invalid TS identifier
   if (!isValidTypeScriptIdentifier(pascalType)) {
     return pascalType + '$';
   }
-  
+
   return pascalType;
 }
 
@@ -56,12 +41,12 @@ export function getNodeInterfaceName(nodeType: string): string {
 export function getTypeGuardName(nodeType: string): string {
   const interfaceName = getNodeInterfaceName(nodeType);
   const guardName = 'is' + interfaceName;
-  
+
   // Guard name should inherit the aliasing from interface name
   if (!isValidTypeScriptIdentifier(guardName)) {
     return guardName + '$';
   }
-  
+
   return guardName;
 }
 
@@ -87,10 +72,10 @@ export function generateNamespaceAlias(nodeType: string): string | null {
   if (!needsAliasing(nodeType)) {
     return null;
   }
-  
+
   const aliasedName = getNodeInterfaceName(nodeType); // Has $ suffix
   const cleanName = aliasedName.endsWith('$') ? aliasedName.slice(0, -1) : aliasedName;
-  
+
   return `export { ${aliasedName} as ${cleanName} }`;
 }
 
@@ -157,6 +142,46 @@ export function typeAlias(name: string, type: string): string {
   return `export type ${name} = ${type};`;
 }
 
+/**
+ * Generate TypeScript template literal type
+ */
+export function templateLiteralType(parts: string[]): string {
+  return `\`\${${parts.join('}\${')}}\``;
+}
+
+/**
+ * Format TypeScript generic type parameters
+ */
+export function genericParams(params: string[]): string {
+  if (params.length === 0) return '';
+  return `<${params.join(', ')}>`;
+}
+
+/**
+ * Generate conditional type expression
+ */
+export function conditionalType(
+  condition: string,
+  trueType: string,
+  falseType: string,
+): string {
+  return `${condition} extends true ? ${trueType} : ${falseType}`;
+}
+
+/**
+ * Generate mapped type expression
+ */
+export function mappedType(
+  keyType: string,
+  valueType: string,
+  modifiers?: { readonly?: boolean; optional?: boolean },
+): string {
+  const readonly = modifiers?.readonly ? 'readonly ' : '';
+  const optional = modifiers?.optional ? '?' : '';
+
+  return `{ ${readonly}[K in ${keyType}]${optional}: ${valueType} }`;
+}
+
 export function unionType(types: string[], multiline = true): string {
   if (types.length === 0) return 'never';
   if (types.length === 1) return types[0]!;
@@ -171,6 +196,55 @@ export function unionType(types: string[], multiline = true): string {
   }).join('\n');
 }
 
+/**
+ * Generate TypeScript union type declaration with export
+ */
+export function unionTypeDeclaration(
+  name: string,
+  members: string[],
+  exported = true,
+): string {
+  const exportKeyword = exported ? 'export ' : '';
+
+  if (members.length === 0) {
+    return `${exportKeyword}type ${name} = never;`;
+  }
+
+  const lines = [`${exportKeyword}type ${name} =`];
+  members.forEach((member, index) => {
+    const separator = index === 0 ? '' : '|';
+    lines.push(`  ${separator} ${member}`);
+  });
+  lines.push(';');
+
+  return lines.join('\n');
+}
+
+/**
+ * Emit a union type with proper formatting (compatible with code-emission usage)
+ */
+export function emitUnionType(types: string[], asLiterals: boolean = true): string {
+  const escapeStringLiteral = (str: string): string => {
+    return str
+      .replace(/\\/g, '\\\\')
+      .replace(/'/g, '\\\'')
+      .replace(/\n/g, '\\n')
+      .replace(/\r/g, '\\r')
+      .replace(/\t/g, '\\t');
+  };
+
+  const emitStringLiteral = (value: string): string => {
+    return `'${escapeStringLiteral(value)}'`;
+  };
+
+  const emitType = (name: string, asLiteral: boolean = true): string => {
+    return asLiteral ? emitStringLiteral(name) : name;
+  };
+
+  const formattedTypes = types.map(type => emitType(type, asLiterals));
+  return formattedTypes.join(' | ');
+}
+
 export function interfaceDeclaration(name: string, members: string[]): string {
   if (members.length === 0) {
     return `export interface ${name} {}`;
@@ -179,6 +253,27 @@ export function interfaceDeclaration(name: string, members: string[]): string {
   return `export interface ${name} {
 ${members.map(m => `  ${m}`).join('\n')}
 }`;
+}
+
+/**
+ * Generate TypeScript interface with advanced property options
+ */
+export function interfaceDeclarationAdvanced(
+  name: string,
+  extendsClause: string | null,
+  properties: Array<{ name: string; type: string; readonly?: boolean; optional?: boolean }>,
+): string {
+  const extendsText = extendsClause ? ` extends ${extendsClause}` : '';
+  const lines = [`export interface ${name}${extendsText} {`];
+
+  properties.forEach(prop => {
+    const readonly = prop.readonly ? 'readonly ' : '';
+    const optional = prop.optional ? '?' : '';
+    lines.push(`  ${readonly}${prop.name}${optional}: ${prop.type};`);
+  });
+
+  lines.push('}');
+  return lines.join('\n');
 }
 
 // ============= Function Declaration Helpers =============
@@ -194,13 +289,29 @@ export function functionDeclaration(
   returnType: string,
   body: string[],
   isExport = true,
+  jsdoc?: string,
 ): string {
+  const lines: string[] = [];
+  
+  if (jsdoc) {
+    lines.push(jsdoc);
+  }
+  
   const exportPrefix = isExport ? 'export ' : '';
   const paramList = params.map(p => `${p.name}: ${p.type}`).join(', ');
 
-  return `${exportPrefix}function ${name}(${paramList}): ${returnType} {
-${body.map(line => `  ${line}`).join('\n')}
-}`;
+  lines.push(`${exportPrefix}function ${name}(${paramList}): ${returnType} {`);
+  body.forEach(line => {
+    if (line.trim() === '') {
+      lines.push('');
+    }
+    else {
+      lines.push(`  ${line}`);
+    }
+  });
+  lines.push('}');
+
+  return lines.join('\n');
 }
 
 export function arrowFunction(
@@ -215,32 +326,7 @@ export function arrowFunction(
 }
 
 // ============= JSDoc Helpers =============
-
-export function jsDoc(lines: string[]): string {
-  if (lines.length === 0) return '';
-
-  if (lines.length === 1) {
-    return `/** ${lines[0]} */`;
-  }
-
-  return `/**
-${lines.map(line => ` * ${line}`).join('\n')}
- */`;
-}
-
-export function jsDocWithExample(description: string[], example?: string[]): string {
-  const allLines = [...description];
-
-  if (example && example.length > 0) {
-    allLines.push('');
-    allLines.push('@example');
-    allLines.push('```typescript');
-    allLines.push(...example);
-    allLines.push('```');
-  }
-
-  return jsDoc(allLines);
-}
+// Note: For comprehensive JSDoc generation, use jsdoc/builders.ts instead
 
 // ============= Statement Helpers =============
 
@@ -339,4 +425,125 @@ export function enumObject(name: string, values: Record<string, string>): string
   return `export const ${name} = {
 ${entries}
 } as const;`;
+}
+
+// ============= Additional Syntax Helpers (from type-helpers) =============
+
+/**
+ * Generate TypeScript union type members list
+ */
+export function unionMembers(types: string[]): string[] {
+  return types.map((type, index) => {
+    const separator = index === 0 ? '' : '|';
+    return `  ${separator} ${type}`;
+  });
+}
+
+/**
+ * Generate TypeScript array type literal
+ */
+export function arrayLiteral(items: string[], itemType: 'string' | 'number' = 'string'): string {
+  const quotedItems = itemType === 'string'
+    ? items.map(item => `'${item}'`)
+    : items.map(String);
+  return `[${quotedItems.join(', ')}]`;
+}
+
+/**
+ * Generate TypeScript const assertion
+ */
+export function constAssertion(name: string, value: string): string {
+  return `export const ${name} = ${value} as const;`;
+}
+
+/**
+ * Generate relative import statement
+ */
+export function relativeImport(
+  imports: string[],
+  modulePath: string,
+  isTypeImport = true,
+): string {
+  const importKeyword = isTypeImport ? 'import type' : 'import';
+
+  if (imports.length === 1) {
+    return `${importKeyword} { ${imports[0]} } from '${modulePath}';`;
+  }
+
+  return [
+    `${importKeyword} {`,
+    ...imports.map(imp => `  ${imp},`),
+    `} from '${modulePath}';`,
+  ].join('\n');
+}
+
+// ============= Code Emission Utilities (from code-emission.ts) =============
+
+/**
+ * Escape string for TypeScript string literal
+ */
+export function escapeStringLiteral(str: string): string {
+  return str
+    .replace(/\\/g, '\\\\')
+    .replace(/'/g, '\\\'')
+    .replace(/\n/g, '\\n')
+    .replace(/\r/g, '\\r')
+    .replace(/\t/g, '\\t');
+}
+
+/**
+ * Emit a TypeScript string literal with proper quoting and escaping
+ */
+export function emitStringLiteral(value: string): string {
+  return `'${escapeStringLiteral(value)}'`;
+}
+
+/**
+ * Emit a TypeScript identifier (bare name)
+ */
+export function emitIdentifier(name: string): string {
+  return name;
+}
+
+/**
+ * Emit a TypeScript type (identifier or literal based on context)
+ */
+export function emitType(name: string, asLiteral: boolean = true): string {
+  return asLiteral ? emitStringLiteral(name) : emitIdentifier(name);
+}
+
+/**
+ * Emit optional type (Type | null)
+ */
+export function emitOptionalType(type: string, asLiteral: boolean = true): string {
+  return `${emitType(type, asLiteral)} | null`;
+}
+
+/**
+ * Emit tuple type with proper formatting
+ */
+export function emitTupleType(types: Array<{ type: string; optional: boolean }>, asLiterals: boolean = true): string {
+  const formattedTypes = types.map(t =>
+    t.optional ? emitOptionalType(t.type, asLiterals) : emitType(t.type, asLiterals)
+  );
+  return `[${formattedTypes.join(', ')}]`;
+}
+
+/**
+ * Emit interface property with proper formatting
+ */
+export function emitInterfaceProperty(key: string, valueType: string): string {
+  return `  ${emitStringLiteral(key)}: ${valueType};`;
+}
+
+// ============= Identifier Safety Helpers =============
+
+/**
+ * Ensure a name is a safe TypeScript identifier by appending '$' if invalid
+ */
+export function safeName(name: string): string {
+  if (!isValidTypeScriptIdentifier(name)) {
+    return name + '$';
+  }
+  return name;
 }

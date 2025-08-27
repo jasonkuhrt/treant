@@ -385,3 +385,16 @@ export function buildFileHeader(config: {
   
   return lines.join('\n');
 }
+
+
+/**
+ * Emit generated file header with eslint disable (simple version)
+ */
+export function emitGeneratedFileHeader(description: string): string {
+  return [
+    '/* eslint-disable */',
+    `// Auto-generated ${description}`,
+    '// DO NOT EDIT - This file is overwritten by the generator',
+    '',
+  ].join('\n');
+}

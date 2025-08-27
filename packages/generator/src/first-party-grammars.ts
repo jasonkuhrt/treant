@@ -1,8 +1,8 @@
 import { FileSystem, Path } from '@effect/platform';
 import { Effect, Match, Schema } from 'effect';
+import { toPascalCase } from './lib/case.js';
 import { loadPackageJson } from './lib/package-utils.js';
-import { PathOrLiteral, type PathOrLiteralType } from './lib/schema-utils.js';
-import * as TS from './lib/ts-syntax/$.js';
+import { PathOrLiteral, type PathOrLiteralType } from './lib/path-or-literal.js';
 
 export const FirstPartyGrammar = Schema.Literal('graphql');
 
@@ -66,7 +66,7 @@ export const resolveGrammarPaths = (grammarInput: GrammarInput) =>
             Effect.succeed({
               grammarPath: loaded.grammarPath,
               nodeTypesPath: loaded.nodeTypesPath,
-              nameOverride: loaded.nameOverride || TS.toPascalCase(grammarInput.value),
+              nameOverride: loaded.nameOverride || toPascalCase(grammarInput.value),
             })),
           Match.orElse(() =>
             Effect.fail(

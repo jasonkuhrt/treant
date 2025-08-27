@@ -1,41 +1,12 @@
 # Treant
 
-Tree-sitter GraphQL parser with TypeScript SDK.
+Generate type-safe TypeScript SDKs from Tree-sitter grammars.
 
-## Packages
-
-| Package | Description |
-| ------- | ----------- |
-| `@treant/graphql` | All-in-one GraphQL parser |
-| `@treant/graphql-sdk` | TypeScript SDK only |
-| `@treant/graphql-grammar-wasm` | WASM binary only |
-| `@treant/generator` | Generate SDKs for any grammar |
-
-## Quick Start
-
-```bash
-npm install @treant/graphql
-```
-
-```typescript
-import { parse, Node } from '@treant/graphql';
-
-const tree = await parse(`query { hello }`);
-
-if (Node.isOperationDefinition(tree.rootNode)) {
-  console.log('It's a query!');
-}
-```
-
-## Development
-
-```bash
-pnpm install
-pnpm build
-```
-
-See [DEVELOPMENT.md](DEVELOPMENT.md) for details.
-
-## Credits
-
-Grammar based on [treant](https://github.com/bkegley/treant).
+| Package                                                         | Description                                            |
+| --------------------------------------------------------------- | ------------------------------------------------------ |
+| [`@treant/generator`](packages/generator)                       | A CLI to generate a type safe library for any grammar  |
+| [`@treant/grammar`](packages/grammar)                           | Grammar type definitions                               |
+| [`@treant/graphql-grammar`](packages/graphql-grammar)           | GraphQL grammar definition                             |
+| [`@treant/graphql-grammar-wasm`](packages/graphql-grammar-wasm) | GraphQL WASM parser                                    |
+| [`@treant/graphql-sdk`](packages/graphql-sdk)                   | Generated GraphQL SDK                                  |
+| [`@treant/graphql`](packages/graphql)                           | High level GraphQL package wrapping all graphql-* ones |

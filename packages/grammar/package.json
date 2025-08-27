@@ -12,7 +12,6 @@
   },
   "exports": {
     ".": {
-      "types": "./build/$.d.ts",
       "import": "./build/$.js"
     }
   },
