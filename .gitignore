@@ -1,8 +1,15 @@
+.turbo/
 node_modules
 .DS_Store
-parser/
-tree-sitter-*.wasm
-grammar-definition-js
-grammar-definition/types.generated.ts
-grammar-lib
-grammar-lib-build
+
+# Generated parser files (in src/ as tree-sitter expects)
+packages/graphql-grammar/src/
+
+# Built WASM files
+*.wasm
+!packages/graphql-grammar-wasm/grammar.wasm
+
+# generated SDK
+packages/graphql-sdk/src-generated/
+
+build/

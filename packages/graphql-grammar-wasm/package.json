@@ -1,0 +1,37 @@
+{
+  "name": "@treant/graphql-grammar-wasm",
+  "version": "1.2.0",
+  "description": "Pre-built WASM binary for tree-sitter GraphQL grammar",
+  "type": "module",
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
+    "directory": "packages/wasm"
+  },
+  "keywords": [
+    "tree-sitter",
+    "graphql",
+    "wasm",
+    "parser",
+    "binary"
+  ],
+  "exports": {
+    ".": "./grammar.wasm"
+  },
+  "scripts": {
+    "prebuild": "pnpm --filter @treant/graphql-grammar build",
+    "build": "tree-sitter build --docker --wasm --output grammar.wasm ../graphql-grammar",
+    "test": "vitest",
+    "clean": "rm -f grammar.wasm"
+  },
+  "files": [
+    "grammar.wasm",
+    "README.md"
+  ],
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.8",
+    "web-tree-sitter": "^0.25.8"
+  }
+}

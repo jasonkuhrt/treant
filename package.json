@@ -1,77 +1,39 @@
 {
-  "name": "tree-sitter-graphql-grammar-wasm",
-  "version": "1.1.0",
+  "name": "treant-monorepo",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "description": "Pre-built WASM binary for tree-sitter GraphQL grammar",
+  "packageManager": "pnpm@10.11.1",
+  "description": "Monorepo for tree-sitter GraphQL packages",
   "author": "Jason Kuhrt",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jasonkuhrt/tree-sitter-graphql-grammar-wasm.git"
+    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git"
   },
-  "keywords": [
-    "tree-sitter",
-    "graphql",
-    "wasm",
-    "grammar",
-    "parser"
-  ],
   "scripts": {
-    "gen": "pnpm run '/^gen:.*/'",
-    "pregen:parser": "pnpm build:grammar",
-    "gen:parser": "tree-sitter generate --output parser/src grammar-definition-js/grammar.js",
-    "postgen:parser": "pnpm gen:grammar-lib",
-    "gen:grammar-lib": "tsx scripts/gen-grammar-lib.ts --name GraphQL",
-    "prebuild:grammar-lib": "pnpm gen:grammar-lib && mkdir -p grammar-lib/parser/src && cp parser/src/grammar.json grammar-lib/parser/src/",
-    "build:grammar-lib": "tsc --project tsconfig.build.grammar-lib.json",
-    "prebuild:wasm": "pnpm run gen:parser",
-    "build:grammar": "tsc --project tsconfig.build.json --noCheck",
-    "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm parser",
-    "build": "pnpm build:wasm && pnpm build:grammar-lib",
-    "prepack": "pnpm build",
-    "check:types": "tsc --noEmit",
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "check:types": "turbo run check:types",
     "format": "dprint fmt",
     "format:check": "dprint check",
-    "pretest": "test -f grammar.wasm || pnpm run build",
-    "test": "vitest",
-    "test:runtime": "vitest",
-    "test:types": "tsc --noEmit"
-  },
-  "exports": {
-    ".": "./grammar-lib-build/$.js",
-    "./grammar.wasm": "./grammar.wasm",
-    "./tree-sitter-graphql": "./grammar-lib-build/$.js"
-  },
-  "files": [
-    "grammar.wasm",
-    "grammar-lib",
-    "grammar-lib-build",
-    "README.md"
-  ],
-  "peerDependencies": {
-    "web-tree-sitter": "^0.25.0"
-  },
-  "peerDependenciesMeta": {
-    "web-tree-sitter": {
-      "optional": true
-    }
+    "generate": "turbo run generate --filter=@treant/graphql-sdk",
+    "dev": "turbo run dev"
   },
   "devDependencies": {
-    "@dprint/formatter": "^0.4.1",
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
-    "@types/node": "^22.10.5",
-    "@wollybeard/kit": "^0.41.0",
+    "@types/node": "^24.3.0",
     "dprint": "^0.50.1",
-    "tree-sitter-cli": "^0.25.8",
-    "tsx": "^4.20.3",
-    "typescript": "^5.7.3",
-    "vitest": "^3.2.4",
-    "web-tree-sitter": "^0.25.8"
+    "tsx": "^4.20.5",
+    "turbo": "^2.5.6",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "tree-sitter-cli"
+      "tree-sitter-cli",
+      "esbuild"
     ]
   }
 }

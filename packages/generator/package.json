@@ -1,0 +1,41 @@
+{
+  "name": "@treant/generator",
+  "version": "1.0.0",
+  "description": "TypeScript SDK generator for tree-sitter grammars",
+  "type": "module",
+  "private": false,
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
+    "directory": "packages/generator"
+  },
+  "bin": {
+    "treant": "./build/cli.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./build/generator.d.ts",
+      "import": "./build/generator.js"
+    }
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@dprint/formatter": "^0.4.1",
+    "@effect/cli": "^0.69.2",
+    "@effect/platform": "^0.90.6",
+    "@effect/platform-node": "^0.96.0",
+    "@treant/grammar": "workspace:*",
+    "@treant/graphql-grammar": "workspace:*",
+    "effect": "^3.17.9"
+  },
+  "devDependencies": {}
+}

@@ -1,0 +1,41 @@
+{
+  "name": "@treant/graphql",
+  "version": "1.0.0",
+  "description": "Complete GraphQL parser with TypeScript SDK - wraps grammar WASM and SDK for easy use",
+  "type": "module",
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
+    "directory": "packages/graphql"
+  },
+  "keywords": [
+    "tree-sitter",
+    "graphql",
+    "parser",
+    "ast",
+    "typescript",
+    "wasm"
+  ],
+  "exports": {
+    ".": {
+      "types": "./build/index.d.ts",
+      "import": "./build/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest",
+    "check:types": "tsc --noEmit"
+  },
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@treant/graphql-grammar-wasm": "workspace:*",
+    "@treant/graphql-sdk": "workspace:*",
+    "web-tree-sitter": "^0.25.0"
+  },
+  "devDependencies": {}
+}

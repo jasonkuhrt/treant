@@ -1,0 +1,32 @@
+{
+  "name": "@treant/graphql-grammar",
+  "version": "1.0.0",
+  "description": "Tree-sitter grammar for GraphQL",
+  "type": "module",
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
+    "directory": "packages/graphql-grammar"
+  },
+  "treant": {
+    "displayName": "GraphQL"
+  },
+  "files": [
+    "src/grammar.json",
+    "src/node-types.json"
+  ],
+  "exports": {
+    "./package.json": "./package.json",
+    "./grammar.json": "./src/grammar.json",
+    "./node-types.json": "./src/node-types.json"
+  },
+  "scripts": {
+    "build": "tree-sitter generate grammar.js",
+    "clean": "rm -rf src"
+  },
+  "devDependencies": {
+    "tree-sitter-cli": "^0.25.8"
+  }
+}

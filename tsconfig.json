@@ -1,15 +1,14 @@
 {
   "extends": ["@tsconfig/strictest", "@tsconfig/node24"],
   "compilerOptions": {
-    "noEmit": true,
     "module": "NodeNext",
     "target": "ES2022",
     "moduleResolution": "NodeNext",
-    "types": ["node", "tree-sitter-cli/dsl"],
     "resolveJsonModule": true,
     "noUnusedLocals": false,
-    "noUnusedParameters": false
-  },
-  "include": ["grammar-lib-tests/**/*", "grammar-definition/**/*", "scripts/**/*"],
-  "exclude": ["node_modules", "grammar-definition-js"]
+    "noUnusedParameters": false,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true
+  }
 }

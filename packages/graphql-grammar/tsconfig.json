@@ -1,0 +1,11 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["tree-sitter-cli/dsl"],
+    "allowJs": true,
+    "checkJs": true,
+    "noEmit": true
+  },
+  "include": ["grammar.js", "*.json"],
+  "exclude": ["node_modules", "src"]
+}
