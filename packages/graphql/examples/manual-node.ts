@@ -1,15 +1,13 @@
 import { readFileSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
 import { Language, type Node, Parser } from 'web-tree-sitter';
+import { getWasmPath } from '@treant/graphql';
 
 // Initialize the parser
 await Parser.init();
 const parser = new Parser();
 
-// Load the GraphQL grammar from this package
-const wasmPath = fileURLToPath(
-  new URL('../grammar.wasm', import.meta.url),
-);
+// Load the GraphQL grammar using the wrapper package helper
+const wasmPath = getWasmPath();
 const wasmBuffer = readFileSync(wasmPath);
 const GraphQL = await Language.load(wasmBuffer);
 parser.setLanguage(GraphQL);

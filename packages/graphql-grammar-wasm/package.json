@@ -31,7 +31,6 @@
     "README.md"
   ],
   "devDependencies": {
-    "tree-sitter-cli": "^0.25.8",
-    "web-tree-sitter": "^0.25.8"
+    "tree-sitter-cli": "^0.25.8"
   }
 }
