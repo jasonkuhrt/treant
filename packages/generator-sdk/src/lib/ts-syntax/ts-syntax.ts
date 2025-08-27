@@ -4,10 +4,10 @@
  * Pure functions for building TypeScript syntax without string concatenation
  */
 
-import { toPascalCase } from '../case.js';
+import { Core } from '@treant/core';
 
 // Re-export case utilities for convenience
-export { toPascalCase } from '../case.js';
+export const toPascalCase = Core.toPascalCase;
 
 /**
  * Check if a string is a valid TypeScript identifier

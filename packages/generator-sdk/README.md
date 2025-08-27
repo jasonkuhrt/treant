@@ -1,11 +1,20 @@
-# @treant/generator
+# @treant/generator-sdk
 
-Generate TypeScript SDKs from tree-sitter grammars.
+TypeScript SDK generator API for tree-sitter grammars.
 
 ## Usage
 
-```bash
-tsx @treant/generator --name GraphQL
+This package provides the core API for generating TypeScript SDKs. For CLI usage, see `@treant/cli`.
+
+```typescript
+import { generate } from '@treant/generator-sdk';
+
+await generate({
+  grammarPath: './grammar.json',
+  nodeTypesPath: './node-types.json', 
+  outputDir: './src-generated',
+  nameOverride: 'GraphQL'
+});
 ```
 
 Expects to find:
@@ -31,7 +40,7 @@ Outputs to:
   },
   "devDependencies": {
     "web-tree-sitter": "^0.25.8",
-    "@treant/generator": "workspace:*"
+    "@treant/cli": "workspace:*"
   }
 }
 ```

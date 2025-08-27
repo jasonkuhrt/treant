@@ -1,14 +1,14 @@
 {
-  "name": "@treant/grammar",
+  "name": "@treant/core",
   "version": "1.0.0",
-  "description": "TypeScript types for tree-sitter grammar definitions",
+  "description": "Core utilities for treant tree-sitter tools",
   "type": "module",
   "author": "Jason Kuhrt",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jasonkuhrt/treant.git",
-    "directory": "packages/grammar"
+    "directory": "packages/core"
   },
   "exports": {
     ".": {
@@ -20,7 +20,12 @@
   ],
   "scripts": {
     "build": "tsc",
-    "check:types": "tsc --noEmit",
-    "test": "vitest"
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@effect/platform": "^0.90.6",
+    "@effect/platform-node": "^0.96.0",
+    "@treant/graphql-grammar": "workspace:*",
+    "effect": "^3.17.9"
   }
 }

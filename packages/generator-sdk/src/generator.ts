@@ -194,6 +194,15 @@ export const generate = (options: GenerateOptions) =>
 
     // Note: This would need to be refactored to use Effect as well
     yield* Effect.promise(() => generateCursorSystem(cursorGeneratorConfig, grammarAnalysis, DEFAULT_CURSOR_CONFIG));
+
+    // Generate namespace export files
+    // Generate $$.ts (barrel export)
+    const barrelExportContent = generateBarrelExportFile(namedNodes, grammarNamePascal);
+    yield* writeFormattedFile(path.join(outputDir, '$$.ts'), barrelExportContent, formatter);
+
+    // Generate $.ts (namespace export) 
+    const namespaceExportContent = generateNamespaceExportFile(grammarNamespaceExport);
+    yield* writeFormattedFile(path.join(outputDir, '$.ts'), namespaceExportContent, formatter);
   });
 
 // Helper functions for generating different file types
@@ -316,5 +325,45 @@ export type OperatorType = ${operatorNodes.map(n => `'${n.type}'`).join(' | ') |
 
 // Keyword types
 export type KeywordType = ${keywordNodes.map(n => `'${n.type}'`).join(' | ') || 'never'};
+`;
+}
+
+function generateBarrelExportFile(namedNodes: Grammar.NodeType[], grammarNamePascal: string): string {
+  const lines: string[] = [];
+  
+  lines.push(`/**`);
+  lines.push(` * Generated ${grammarNamePascal} SDK`);
+  lines.push(` * @generated`);
+  lines.push(` */`);
+  lines.push('');
+
+  // Export root utilities
+  lines.push('// Root utilities');
+  lines.push(`export * from './types.js';`);
+  lines.push(`export * from './utils.js';`);
+  lines.push(`export * from './anonymous-nodes.js';`);
+  lines.push('');
+
+  // Export cursor system namespace
+  lines.push('// Cursor system');
+  lines.push(`export * as Cursor from './cursor/$.js';`);
+  lines.push('');
+
+  // Export all node interfaces
+  lines.push('// Node interfaces');
+  namedNodes.forEach(node => {
+    lines.push(`export * from './nodes/${node.type}.js';`);
+  });
+
+  return lines.join('\n');
+}
+
+function generateNamespaceExportFile(grammarNamespaceExport: string): string {
+  return `/**
+ * Namespace export for ${grammarNamespaceExport}
+ * @generated
+ */
+
+export * as ${grammarNamespaceExport} from './$$.js';
 `;
 }

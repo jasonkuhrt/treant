@@ -7,8 +7,8 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
-    "directory": "packages/wasm"
+    "url": "git+https://github.com/jasonkuhrt/treant.git",
+    "directory": "packages/graphql-grammar-wasm"
   },
   "keywords": [
     "tree-sitter",

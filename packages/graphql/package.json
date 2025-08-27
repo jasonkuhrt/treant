@@ -7,7 +7,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jasonkuhrt/treant-grammar-wasm.git",
+    "url": "git+https://github.com/jasonkuhrt/treant.git",
     "directory": "packages/graphql"
   },
   "keywords": [
@@ -20,8 +20,7 @@
   ],
   "exports": {
     ".": {
-      "types": "./build/index.d.ts",
-      "import": "./build/index.js"
+      "import": "./build/$.js"
     }
   },
   "scripts": {
@@ -37,5 +36,7 @@
     "@treant/graphql-sdk": "workspace:*",
     "web-tree-sitter": "^0.25.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@treant/grammar": "workspace:*"
+  }
 }

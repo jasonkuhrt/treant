@@ -1,8 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
-import { Parser, Language, Tree } from 'web-tree-sitter';
-
-export * from '@treant/graphql-sdk';
+import { Language, Parser, Tree } from 'web-tree-sitter';
 
 export let parser: Parser | null = null;
 export let language: Language | null = null;
@@ -60,4 +58,3 @@ export function parseSync(code: string): Tree {
   }
   return result;
 }
-

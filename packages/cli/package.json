@@ -1,0 +1,38 @@
+{
+  "name": "@treant/cli",
+  "version": "1.0.0",
+  "description": "Command-line interface for Treant tree-sitter tools",
+  "type": "module",
+  "author": "Jason Kuhrt",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jasonkuhrt/treant.git",
+    "directory": "packages/cli"
+  },
+  "bin": {
+    "treant": "./build/main.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./build/main.js"
+    }
+  },
+  "files": [
+    "build"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "check:types": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@effect/cli": "^0.69.2",
+    "@effect/platform": "^0.90.6",
+    "@effect/platform-node": "^0.96.0",
+    "@effect/printer": "^0.45.0",
+    "@effect/printer-ansi": "^0.45.0",
+    "@treant/core": "workspace:*",
+    "@treant/generator-sdk": "workspace:*",
+    "effect": "^3.17.9"
+  }
+}

@@ -1,18 +1,18 @@
 import { FileSystem, Path } from '@effect/platform';
 import { Effect, Match, Schema } from 'effect';
-import { toPascalCase } from './lib/case.js';
-import { loadPackageJson } from './lib/package-utils.js';
-import { PathOrLiteral, type PathOrLiteralType } from './lib/path-or-literal.js';
+import { toPascalCase } from './case.js';
+import { loadPackageJson } from './package-utils.js';
+import { PathOrLiteral, type PathOrLiteralType } from './path-or-literal.js';
 
 export const FirstPartyGrammar = Schema.Literal('graphql');
 
 export type FirstPartyGrammar = Schema.Schema.Type<typeof FirstPartyGrammar>;
 
+export type GrammarInput = PathOrLiteralType<typeof FirstPartyGrammar.literals>;
+
 export const GrammarInputSchema = PathOrLiteral(FirstPartyGrammar.literals);
 
 export const isFirstPartyGrammar = Schema.is(FirstPartyGrammar);
-
-export type GrammarInput = PathOrLiteralType<typeof FirstPartyGrammar.literals>;
 
 // Helper to resolve grammar from name or directory path
 export const resolveGrammarPaths = (grammarInput: GrammarInput) =>

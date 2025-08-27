@@ -6,13 +6,13 @@
  */
 
 import { Grammar } from '@treant/grammar';
-import { toCamelCase, toPascalCase, toSnakeCase } from '../lib/case.js';
+import { Core } from '@treant/core';
 
 /**
  * Generate TypeScript node interface name with "Node" suffix
  */
 export function getNodeInterfaceName(nodeType: string): string {
-  const pascalType = toPascalCase(nodeType);
+  const pascalType = Core.toPascalCase(nodeType);
   return pascalType + 'Node';
 }
 
@@ -28,7 +28,7 @@ export function getTypeGuardName(nodeType: string): string {
  * Generate file name from node type
  */
 export function getNodeFileName(nodeType: string): string {
-  return toSnakeCase(getNodeInterfaceName(nodeType).replace(/Node$/, ''));
+  return Core.toSnakeCase(getNodeInterfaceName(nodeType).replace(/Node$/, ''));
 }
 
 /**
@@ -122,7 +122,7 @@ export function generateConstructorJSDoc(node: Grammar.NodeType): string {
     node.children.types
       .filter((t: any) => t.named)
       .forEach((childType: any) => {
-        const childName = toCamelCase(childType.type);
+        const childName = Core.toCamelCase(childType.type);
         const childTypeName = getNodeInterfaceName(childType.type);
         lines.push(` * @param props.${childName} - {@link ${childTypeName}}`);
       });
@@ -151,7 +151,7 @@ export function generateAccessorJSDoc(
 ): string {
   const parentName = getNodeInterfaceName(parentType);
   const childName = getNodeInterfaceName(childType);
-  const functionName = `get${toPascalCase(childType)}From${toPascalCase(parentType)}`;
+  const functionName = `get${Core.toPascalCase(childType)}From${Core.toPascalCase(parentType)}`;
 
   const positionInfo = position !== undefined ? ` at position ${position}` : '';
 
@@ -164,8 +164,8 @@ export function generateAccessorJSDoc(
     ' * ',
     ' * @example',
     ' * ```typescript',
-    ` * const ${toCamelCase(childType)} = ${functionName}(${toCamelCase(parentType)});`,
-    ` * if (${toCamelCase(childType)}) {`,
+    ` * const ${Core.toCamelCase(childType)} = ${functionName}(${Core.toCamelCase(parentType)});`,
+    ` * if (${Core.toCamelCase(childType)}) {`,
     ` *   // Use the ${childType.replace(/_/g, ' ')} node`,
     ' * }',
     ' * ```',
@@ -189,8 +189,8 @@ export function generateExtractorJSDoc(
     ' * ',
     ' * @example',
     ' * ```typescript',
-    ` * const ${toCamelCase(targetType)}s = extract${toPascalCase(targetType)}s(rootNode);`,
-    ` * ${toCamelCase(targetType)}s.forEach(node => {`,
+    ` * const ${Core.toCamelCase(targetType)}s = extract${Core.toPascalCase(targetType)}s(rootNode);`,
+    ` * ${Core.toCamelCase(targetType)}s.forEach(node => {`,
     ' *   // Process each node',
     ' * });',
     ' * ```',

@@ -1,5 +1,5 @@
 // Custom Vitest snapshot serializer for tree-sitter nodes
-export const treeSitterAstSerializer = {
+export const ast = {
   test(val: any): val is { type: string; childCount: number; startPosition: any; endPosition: any } {
     // Check if this is a tree-sitter node
     return (

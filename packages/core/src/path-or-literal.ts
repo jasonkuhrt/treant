@@ -1,8 +1,4 @@
-import { Prompt } from '@effect/cli';
-import { Terminal } from '@effect/platform';
-import { QuitException } from '@effect/platform/Terminal';
 import { Schema } from 'effect';
-import { Effect } from 'effect';
 
 export type PathOrLiteral<$Literals extends readonly [string, ...string[]]> = ReturnType<
   typeof PathOrLiteral<$Literals>
@@ -57,54 +53,3 @@ export const PathOrLiteral = <const Literals extends readonly [string, ...string
 export type PathOrLiteralType<Literals extends readonly [string, ...string[]]> =
   | { _tag: 'path'; value: string }
   | { _tag: 'literal'; value: Literals[number] };
-
-/**
- * Complete interactive prompt for PathOrLiteral schemas
- * Handles both literal selection and custom path input
- */
-export function promptForPathOrLiteral<const Literals extends readonly [string, ...string[]]>(
-  schema: PathOrLiteral<Literals>,
-  config: {
-    selectMessage: string;
-    textMessage: string;
-    descriptionTransform: (literal: Literals[number]) => string;
-    pathOption?: {
-      title?: string;
-      description?: string;
-    };
-  },
-): Effect.Effect<string, QuitException, Terminal.Terminal> {
-  const literals = schema.from.members[0].literals;
-
-  return Effect.gen(function*() {
-    const selected = yield* Prompt.select({
-      message: config.selectMessage,
-      choices: [
-        ...literals.map((literal: Literals[number]) => ({
-          title: literal,
-          value: literal as string,
-          description: config.descriptionTransform(literal),
-        })),
-        {
-          title: config.pathOption?.title ?? 'Custom (specify path)',
-          value: 'custom' as string,
-          description: config.pathOption?.description ?? 'Specify a custom directory path',
-        },
-      ],
-    });
-
-    if (selected === 'custom') {
-      return yield* Prompt.text({
-        message: config.textMessage,
-        validate: (input) => {
-          if (!input.startsWith('./') && !input.startsWith('../') && !input.startsWith('/')) {
-            return Effect.fail('Path must start with ./, ../, or /');
-          }
-          return Effect.succeed(input);
-        },
-      });
-    }
-
-    return selected;
-  });
-}
