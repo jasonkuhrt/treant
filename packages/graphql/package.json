@@ -24,7 +24,7 @@
     }
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc -p tsconfig.build.json",
     "test": "vitest",
     "check:types": "tsc --noEmit"
   },

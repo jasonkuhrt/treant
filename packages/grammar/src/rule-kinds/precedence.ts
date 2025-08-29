@@ -2,17 +2,17 @@
  * Precedence rule kind - rules that handle precedence
  */
 
-import type { Rule } from '../rule.js';
-import type { Rules } from '../rules/$.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { PrecRule, PrecDynamicRule, PrecLeftRule, PrecRightRule } from '../generated/dsl/types.js';
 
 /**
  * Rules that handle precedence
  */
 export type Precedence =
-  | Rules.PrecRule
-  | Rules.PrecDynamicRule
-  | Rules.PrecLeftRule
-  | Rules.PrecRightRule;
+  | PrecRule
+  | PrecDynamicRule
+  | PrecLeftRule
+  | PrecRightRule;
 
 /**
  * Type guard to check if a rule is a precedence rule

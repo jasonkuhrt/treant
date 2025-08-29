@@ -1,17 +1,12 @@
 /**
- * IMMEDIATE_TOKEN rule - token with no whitespace
+ * Immediate token rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { ImmediateTokenRule } from '../generated/dsl/types.js';
 
-export interface ImmediateTokenRule {
-  type: 'IMMEDIATE_TOKEN';
-  content: Rule;
-}
+export type { ImmediateTokenRule };
 
-/**
- * Check if a rule is an IMMEDIATE_TOKEN rule
- */
 export function isImmediateTokenRule(rule: Rule): rule is ImmediateTokenRule {
   return rule.type === 'IMMEDIATE_TOKEN';
 }

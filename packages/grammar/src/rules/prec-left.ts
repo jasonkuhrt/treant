@@ -1,18 +1,12 @@
 /**
- * PREC_LEFT rule - left associative precedence
+ * Prec left rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { PrecLeftRule } from '../generated/dsl/types.js';
 
-export interface PrecLeftRule {
-  type: 'PREC_LEFT';
-  value: number;
-  content: Rule;
-}
+export type { PrecLeftRule };
 
-/**
- * Check if a rule is a PREC_LEFT rule
- */
 export function isPrecLeftRule(rule: Rule): rule is PrecLeftRule {
   return rule.type === 'PREC_LEFT';
 }

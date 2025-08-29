@@ -1,4 +1,4 @@
-import type { Rule } from './rule.js';
+import { Rule } from './generated/dsl/types.js';
 
 /**
  * Top-level grammar JSON structure

@@ -1,17 +1,12 @@
 /**
- * SEQ rule - matches a sequence of rules
+ * Seq rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { SeqRule } from '../generated/dsl/types.js';
 
-export interface SeqRule {
-  type: 'SEQ';
-  members: Rule[];
-}
+export type { SeqRule };
 
-/**
- * Check if a rule is a SEQ rule
- */
 export function isSeqRule(rule: Rule): rule is SeqRule {
   return rule.type === 'SEQ';
 }

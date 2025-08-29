@@ -1,15 +1,15 @@
 /**
  * Analysis utilities for tree-sitter grammar rules.
  * These functions extract information and patterns from grammar structures.
- * 
+ *
  * This module provides comprehensive analysis of tree-sitter grammars including
  * structural information extraction, relationship analysis, and pattern detection.
  */
 
+import type { Rule } from './generated/dsl/types.js';
 import type { GrammarJson } from './grammar-json.js';
 import type { NodeType } from './node-type.js';
-import * as RuleKinds from './rule-kinds/$.js';
-import type { Rule } from './rule.js';
+import { RuleKinds } from './rule-kinds/$.js';
 import { Rules } from './rules/$.js';
 
 /**
@@ -39,7 +39,7 @@ export interface AnonymousNodeCategories {
 /**
  * Get all SYMBOL members from a CHOICE rule
  */
-export function getSymbolMembers(rule: Rules.ChoiceRule): Rules.SymbolRule[] {
+export function getSymbolMembers(rule: Rules.ChoiceRule): Rules.SymbolRule<string>[] {
   return rule.members.filter(Rules.isSymbolRule);
 }
 
@@ -58,11 +58,11 @@ export function detectSemanticGroupings(rules: Record<string, Rule>): Map<string
   const groupings = new Map<string, string[]>();
 
   for (const [ruleName, rule] of Object.entries(rules)) {
-    if (Rules.isChoiceRule(rule)) {
+    if (rule.type === 'CHOICE') {
       const symbolMembers = getSymbolMembers(rule);
       // Check if all members are symbols and there's more than one
-      if (symbolMembers.length === rule.members.length && symbolMembers.length > 1) {
-        groupings.set(ruleName, symbolMembers.map(m => m.name));
+      if (symbolMembers.length === (rule as any).members.length && symbolMembers.length > 1) {
+        groupings.set(ruleName, symbolMembers.map(m => (m as any).name));
       }
     }
   }
@@ -77,8 +77,8 @@ export function extractChildTypes(rule: Rule): string[] {
   const childTypes = new Set<string>();
 
   function traverse(r: Rule): void {
-    if (Rules.isSymbolRule(r)) {
-      childTypes.add(r.name);
+    if (r.type === 'SYMBOL') {
+      childTypes.add((r as any).name);
     }
     else if (RuleKinds.isWithMembers(r)) {
       r.members.forEach(traverse);
@@ -132,7 +132,7 @@ export function findSymbolReferences(grammar: GrammarJson, symbolName: string): 
 /**
  * Check if a rule is a simple alias (just references another rule)
  */
-export function isSimpleAlias(rule: Rule): rule is Rules.SymbolRule {
+export function isSimpleAlias(rule: Rule): rule is Rules.SymbolRule<string> {
   return Rules.isSymbolRule(rule);
 }
 

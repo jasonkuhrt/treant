@@ -1,17 +1,12 @@
 /**
- * CHOICE rule - matches one of several alternatives
+ * Choice rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { ChoiceRule } from '../generated/dsl/types.js';
 
-export interface ChoiceRule {
-  type: 'CHOICE';
-  members: Rule[];
-}
+export type { ChoiceRule };
 
-/**
- * Check if a rule is a CHOICE rule
- */
 export function isChoiceRule(rule: Rule): rule is ChoiceRule {
   return rule.type === 'CHOICE';
 }

@@ -1,18 +1,12 @@
 /**
- * PREC_DYNAMIC rule - dynamic precedence
+ * Prec dynamic rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { PrecDynamicRule } from '../generated/dsl/types.js';
 
-export interface PrecDynamicRule {
-  type: 'PREC_DYNAMIC';
-  value: number;
-  content: Rule;
-}
+export type { PrecDynamicRule };
 
-/**
- * Check if a rule is a PREC_DYNAMIC rule
- */
 export function isPrecDynamicRule(rule: Rule): rule is PrecDynamicRule {
   return rule.type === 'PREC_DYNAMIC';
 }

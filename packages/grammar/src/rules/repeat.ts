@@ -1,17 +1,12 @@
 /**
- * REPEAT rule - matches zero or more occurrences
+ * Repeat rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { RepeatRule } from '../generated/dsl/types.js';
 
-export interface RepeatRule {
-  type: 'REPEAT';
-  content: Rule;
-}
+export type { RepeatRule };
 
-/**
- * Check if a rule is a REPEAT rule
- */
 export function isRepeatRule(rule: Rule): rule is RepeatRule {
   return rule.type === 'REPEAT';
 }

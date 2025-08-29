@@ -14,8 +14,7 @@
     "displayName": "GraphQL"
   },
   "files": [
-    "src/grammar.json",
-    "src/node-types.json"
+    "src"
   ],
   "exports": {
     "./package.json": "./package.json",

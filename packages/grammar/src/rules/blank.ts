@@ -1,16 +1,12 @@
 /**
- * BLANK rule - matches nothing
+ * Blank rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { BlankRule } from '../generated/dsl/types.js';
 
-export interface BlankRule {
-  type: 'BLANK';
-}
+export type { BlankRule };
 
-/**
- * Check if a rule is a BLANK rule
- */
 export function isBlankRule(rule: Rule): rule is BlankRule {
   return rule.type === 'BLANK';
 }

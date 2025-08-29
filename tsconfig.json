@@ -9,6 +9,7 @@
     "noUnusedParameters": false,
     "declaration": true,
     "declarationMap": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "outDir": "build"
   }
 }

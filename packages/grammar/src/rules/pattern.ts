@@ -1,17 +1,12 @@
 /**
- * PATTERN rule - matches a regular expression
+ * Pattern rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { PatternRule } from '../generated/dsl/types.js';
 
-export interface PatternRule {
-  type: 'PATTERN';
-  value: string;
-}
+export type { PatternRule };
 
-/**
- * Check if a rule is a PATTERN rule
- */
 export function isPatternRule(rule: Rule): rule is PatternRule {
   return rule.type === 'PATTERN';
 }

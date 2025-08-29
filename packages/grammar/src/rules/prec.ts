@@ -1,18 +1,12 @@
 /**
- * PREC rule - simple precedence
+ * Prec rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { PrecRule } from '../generated/dsl/types.js';
 
-export interface PrecRule {
-  type: 'PREC';
-  value: number;
-  content: Rule;
-}
+export type { PrecRule };
 
-/**
- * Check if a rule is a PREC rule
- */
 export function isPrecRule(rule: Rule): rule is PrecRule {
   return rule.type === 'PREC';
 }

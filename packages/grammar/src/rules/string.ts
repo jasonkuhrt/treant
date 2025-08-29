@@ -1,17 +1,12 @@
 /**
- * STRING rule - matches a literal string
+ * String rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { StringRule } from '../generated/dsl/types.js';
 
-export interface StringRule {
-  type: 'STRING';
-  value: string;
-}
+export type { StringRule };
 
-/**
- * Check if a rule is a STRING rule
- */
 export function isStringRule(rule: Rule): rule is StringRule {
   return rule.type === 'STRING';
 }

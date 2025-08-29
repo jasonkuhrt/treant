@@ -2,13 +2,13 @@
  * WithMembers rule kind - rules that have members array
  */
 
-import type { Rule } from '../rule.js';
-import type { Rules } from '../rules/$.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { ChoiceRule, SeqRule } from '../generated/dsl/types.js';
 
 /**
  * Rules that have a members array
  */
-export type WithMembers = Rules.ChoiceRule | Rules.SeqRule;
+export type WithMembers = ChoiceRule | SeqRule;
 
 /**
  * Type guard to check if a rule has members

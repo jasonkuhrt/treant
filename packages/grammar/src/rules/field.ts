@@ -1,18 +1,12 @@
 /**
- * FIELD rule - assigns a field name to a child node
+ * Field rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { FieldRule } from '../generated/dsl/types.js';
 
-export interface FieldRule {
-  type: 'FIELD';
-  name: string;
-  content: Rule;
-}
+export type { FieldRule };
 
-/**
- * Check if a rule is a FIELD rule
- */
 export function isFieldRule(rule: Rule): rule is FieldRule {
   return rule.type === 'FIELD';
 }

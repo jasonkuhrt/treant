@@ -1,17 +1,12 @@
 /**
- * TOKEN rule - defines a token
+ * Token rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { TokenRule } from '../generated/dsl/types.js';
 
-export interface TokenRule {
-  type: 'TOKEN';
-  content: Rule;
-}
+export type { TokenRule };
 
-/**
- * Check if a rule is a TOKEN rule
- */
 export function isTokenRule(rule: Rule): rule is TokenRule {
   return rule.type === 'TOKEN';
 }

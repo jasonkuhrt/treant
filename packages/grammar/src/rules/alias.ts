@@ -1,19 +1,12 @@
 /**
- * ALIAS rule - gives a node an alternative name
+ * Alias rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { AliasRule } from '../generated/dsl/types.js';
 
-export interface AliasRule {
-  type: 'ALIAS';
-  content: Rule;
-  named: boolean;
-  value: string;
-}
+export type { AliasRule };
 
-/**
- * Check if a rule is an ALIAS rule
- */
 export function isAliasRule(rule: Rule): rule is AliasRule {
   return rule.type === 'ALIAS';
 }

@@ -1,17 +1,12 @@
 /**
- * SYMBOL rule - references another rule by name
+ * Symbol rule
  */
 
-import type { Rule } from '../rule.js';
+import type { Rule } from '../generated/dsl/types.js';
+import type { SymbolRule } from '../generated/dsl/types.js';
 
-export interface SymbolRule {
-  type: 'SYMBOL';
-  name: string;
-}
+export type { SymbolRule };
 
-/**
- * Check if a rule is a SYMBOL rule
- */
-export function isSymbolRule(rule: Rule): rule is SymbolRule {
+export function isSymbolRule(rule: Rule): rule is SymbolRule<string> {
   return rule.type === 'SYMBOL';
 }
