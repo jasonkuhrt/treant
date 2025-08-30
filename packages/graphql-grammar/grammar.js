@@ -1,4 +1,15 @@
-export default grammar({
+import { Grammar } from "@treant/grammar";
+import {
+  repeat1,
+  choice,
+  repeat,
+  seq,
+  optional,
+  prec,
+  token,
+} from "@treant/grammar/grammar";
+
+export default Grammar.grammar({
   name: "graphql",
 
   extras: ($) => [

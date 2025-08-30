@@ -26,6 +26,7 @@
     "clean": "rm -rf src"
   },
   "devDependencies": {
+    "@treant/grammar": "workspace:*",
     "tree-sitter-cli": "^0.25.8"
   }
 }

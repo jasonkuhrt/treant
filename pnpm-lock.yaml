@@ -132,6 +132,9 @@ importers:
 
   packages/graphql-grammar:
     devDependencies:
+      '@treant/grammar':
+        specifier: workspace:*
+        version: link:../grammar
       tree-sitter-cli:
         specifier: ^0.25.8
         version: 0.25.8

@@ -104,7 +104,6 @@ export const generate = <RuleName extends string>(
       yield* fs.writeFileString(`${tempDir}/grammar.js`, grammarJs)
       
       // Run tree-sitter generate
-      // Run tree-sitter generate in the temp directory
       const executor = yield* CommandExecutor.CommandExecutor
       const processCommand = Command.make('tree-sitter', 'generate', `${tempDir}/grammar.js`, '-o', tempDir)
       

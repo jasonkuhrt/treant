@@ -13,6 +13,9 @@
   "exports": {
     ".": {
       "import": "./build/$.js"
+    },
+    "./grammar": {
+      "import": "./build/$$.js"
     }
   },
   "files": [

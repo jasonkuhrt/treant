@@ -21,14 +21,14 @@ export {
   seq,
   sym,
   token,
-} from './generated/dsl/values.js';
+} from './dsl.js';
 
 export type {
   AliasRule,
   BlankRule,
   ChoiceRule,
   FieldRule,
-  Grammar as GrammarDefinition,
+  Grammar,
   ImmediateTokenRule,
   PatternRule,
   PrecDynamicRule,
