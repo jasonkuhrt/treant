@@ -3,14 +3,108 @@
  */
 
 import { Grammar } from '@treant/grammar';
+import * as Schema from 'effect/Schema';
 import { getNodeInterfaceName, getTypeGuardName } from './generators/type-helpers.js';
 import * as TS from './lib/ts-syntax/$$.js';
 
 // Import cursor generation system
 import { type CursorGeneratorConfig, DEFAULT_CURSOR_CONFIG, generateCursorSystem } from './generators/cursor.js';
 
+/**
+ * Valid JavaScript identifier pattern.
+ * Must start with a letter, $ or _, followed by letters, digits, $ or _.
+ */
+const JavaScriptIdentifier = Schema.String.pipe(
+  Schema.pattern(/^[a-zA-Z_$][a-zA-Z0-9_$]*$/)
+);
+
+/**
+ * Concatenation mode for namespace prefix and name.
+ */
+const ConcatMode = Schema.Literal('camel', 'kebab', 'snake');
+
+/**
+ * Namespace configuration schema.
+ */
+const NamespaceConfig = Schema.Struct({
+  /**
+   * Prefix for the namespace (can be null to disable).
+   */
+  prefix: Schema.Union(JavaScriptIdentifier, Schema.Null),
+  /**
+   * Name of the namespace (must be a valid JavaScript identifier).
+   */
+  name: JavaScriptIdentifier,
+  /**
+   * Concatenation mode for joining prefix and name.
+   */
+  concatMode: ConcatMode,
+});
+
 export interface GenerateOptions extends Grammar.BuiltGrammar {
   nameOverride?: string;
+  /**
+   * Configuration for the exported namespace.
+   * 
+   * The prefix and name are concatenated according to the concatMode:
+   * - 'camel' (default): PascalCase concatenation, e.g., "TreantGraphQL"
+   * - 'kebab': Kebab-case concatenation, e.g., "treant-graphql" 
+   * - 'snake': Snake_case concatenation, e.g., "treant_graphql"
+   * 
+   * Note: When prefix is null, concatMode has no effect.
+   * 
+   * @example
+   * // Default: exports as "TreantGraphQL" (camelCase concatenation)
+   * generate({ ...options })
+   * 
+   * @example
+   * // Custom prefix: exports as "MyGraphQL" (camelCase concatenation)
+   * generate({ ...options, namespace: { prefix: "My" } })
+   * 
+   * @example
+   * // Kebab concatenation: exports as "my-graphql"
+   * generate({ ...options, namespace: { prefix: "My", concatMode: "kebab" } })
+   * 
+   * @example
+   * // Snake concatenation: exports as "my_graphql"
+   * generate({ ...options, namespace: { prefix: "My", concatMode: "snake" } })
+   * 
+   * @example
+   * // Custom name: exports as "TreantMyLang"
+   * generate({ ...options, namespace: { name: "MyLang" } })
+   * 
+   * @example
+   * // Both custom: exports as "MyCustomLang"
+   * generate({ ...options, namespace: { prefix: "My", name: "CustomLang" } })
+   * 
+   * @example
+   * // No prefix: exports as "GraphQL" (concatMode has no effect)
+   * generate({ ...options, namespace: { prefix: null } })
+   */
+  namespace?: {
+    /**
+     * Prefix for the exported namespace.
+     * - Provide a string to customize the prefix (must be a valid JavaScript identifier)
+     * - Provide null to disable the prefix entirely
+     * - Defaults to "Treant"
+     */
+    prefix?: string | null;
+    /**
+     * Name of the exported namespace.
+     * - Must be a valid JavaScript identifier
+     * - Defaults to the PascalCase version of the grammar name
+     */
+    name?: string;
+    /**
+     * Concatenation mode for joining prefix and name.
+     * - 'camel': PascalCase (e.g., "TreantGraphQL")
+     * - 'kebab': Kebab-case (e.g., "treant-graphql")
+     * - 'snake': Snake_case (e.g., "treant_graphql")
+     * - Defaults to 'camel'
+     * - Has no effect when prefix is null
+     */
+    concatMode?: 'camel' | 'kebab' | 'snake';
+  };
 }
 
 /**
@@ -29,15 +123,90 @@ export interface GeneratorOutput {
 }
 
 /**
+ * Convert string to kebab-case
+ */
+function toKebabCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1-$2')
+    .toLowerCase();
+}
+
+/**
+ * Convert string to snake_case
+ */
+function toSnakeCase(str: string): string {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1_$2')
+    .replace(/([A-Z])([A-Z][a-z])/g, '$1_$2')
+    .toLowerCase();
+}
+
+/**
+ * Concatenate prefix and name based on the concatenation mode
+ */
+function concatenateNamespace(
+  prefix: string | null,
+  name: string,
+  mode: 'camel' | 'kebab' | 'snake' = 'camel'
+): string {
+  if (prefix === null) {
+    return name;
+  }
+
+  switch (mode) {
+    case 'kebab':
+      return toKebabCase(prefix) + '-' + toKebabCase(name);
+    case 'snake':
+      return toSnakeCase(prefix) + '_' + toSnakeCase(name);
+    case 'camel':
+    default:
+      return prefix + name;
+  }
+}
+
+/**
  * Main generator function - pure, works with in-memory data
  */
 export async function generate(options: GenerateOptions): Promise<GeneratorOutput> {
-  const { grammar: grammarJson, nodeTypes, nameOverride, wasm } = options;
+  const { grammar: grammarJson, nodeTypes, nameOverride, wasm, namespace } = options;
 
-  // Extract grammar name
+  // Handle namespace configuration
+  let prefix: string | null;
+  let namespaceName: string;
+  let concatMode: 'camel' | 'kebab' | 'snake' = 'camel';
+  
+  if (namespace) {
+    // Use namespace configuration
+    prefix = namespace.prefix === undefined ? 'Treant' : namespace.prefix;
+    concatMode = namespace.concatMode || 'camel';
+    
+    // Validate prefix if provided and not null
+    if (prefix !== null) {
+      Schema.decodeUnknownSync(JavaScriptIdentifier)(prefix);
+    }
+    
+    // Use provided name or default
+    if (namespace.name !== undefined) {
+      // Validate provided name
+      Schema.decodeUnknownSync(JavaScriptIdentifier)(namespace.name);
+      namespaceName = namespace.name;
+    } else {
+      // Use default name logic
+      const grammarName = grammarJson.name;
+      namespaceName = nameOverride || (grammarName === 'graphql' ? 'GraphQL' : TS.toPascalCase(grammarName));
+    }
+  } else {
+    // Use all defaults
+    prefix = 'Treant';
+    const grammarName = grammarJson.name;
+    namespaceName = nameOverride || (grammarName === 'graphql' ? 'GraphQL' : TS.toPascalCase(grammarName));
+  }
+
+  // Extract grammar name for internal use
   const grammarName = grammarJson.name;
-  const grammarNamePascal = nameOverride || (grammarName === 'graphql' ? 'GraphQL' : TS.toPascalCase(grammarName));
-  const grammarNamespaceExport = `Treant${grammarNamePascal}`;
+  const grammarNamePascal = namespaceName; // Use the computed namespace name
+  const grammarNamespaceExport = concatenateNamespace(prefix, namespaceName, concatMode);
 
   // Extract node types
   const namedNodes = nodeTypes.filter(node => node.named === true);
