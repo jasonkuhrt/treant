@@ -1,6 +1,6 @@
 {
   "name": "@treant/grammar",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "TypeScript types for tree-sitter grammar definitions",
   "type": "module",
   "author": "Jason Kuhrt",

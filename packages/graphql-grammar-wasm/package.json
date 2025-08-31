@@ -1,6 +1,6 @@
 {
   "name": "@treant/graphql-grammar-wasm",
-  "version": "1.2.0",
+  "version": "0.0.0",
   "description": "Pre-built WASM binary for tree-sitter GraphQL grammar",
   "type": "module",
   "author": "Jason Kuhrt",

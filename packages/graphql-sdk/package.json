@@ -1,6 +1,6 @@
 {
   "name": "@treant/graphql-sdk",
-  "version": "2.0.0",
+  "version": "0.0.0",
   "description": "TypeScript SDK for tree-sitter GraphQL parser",
   "type": "module",
   "author": "Jason Kuhrt",
