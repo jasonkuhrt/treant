@@ -31,5 +31,8 @@
     "@treant/core": "workspace:*",
     "@treant/grammar": "workspace:*",
     "effect": "^3.17.9"
+  },
+  "devDependencies": {
+    "web-tree-sitter": "^0.25.8"
   }
 }

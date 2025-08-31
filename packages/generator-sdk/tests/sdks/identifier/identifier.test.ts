@@ -1,5 +1,5 @@
 import { describe, expect, expectTypeOf, test } from 'vitest';
-import { TreeSitterTestIdentifier as Identifier } from './identifier.sdk.fix/$.js';
+import { TreantIdentifier as Identifier } from './identifier.sdk.fix/$.js';
 
 test('Parser', async () => {
   const ast = await Identifier.Parser.parse('hello');

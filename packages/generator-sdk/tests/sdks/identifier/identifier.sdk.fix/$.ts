@@ -1,6 +1,6 @@
 /**
- * Namespace export for TreeSitterTestIdentifier
+ * Namespace export for TreantIdentifier
  * @generated
  */
 
-export * as TreeSitterTestIdentifier from './$$.js';
+export * as TreantIdentifier from './$$.js';

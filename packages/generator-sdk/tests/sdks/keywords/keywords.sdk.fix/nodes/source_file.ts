@@ -4,7 +4,7 @@ import type { KeywordNode } from './keyword.js';
 const TYPE = 'source_file' as const;
 
 /**
- * Represents a source file in the test_keywords AST.
+ * Represents a source file in the keywords AST.
  */
 export interface SourceFileNode extends Node {
   type: typeof TYPE;

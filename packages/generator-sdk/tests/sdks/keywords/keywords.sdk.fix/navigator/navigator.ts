@@ -1,5 +1,5 @@
 /**
- * Navigator utilities for test_keywords
+ * Navigator utilities for keywords
  * @generated
  */
 

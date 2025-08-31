@@ -1,5 +1,5 @@
 /**
- * Navigator utilities for test_identifier
+ * Navigator utilities for identifier
  * @generated
  */
 

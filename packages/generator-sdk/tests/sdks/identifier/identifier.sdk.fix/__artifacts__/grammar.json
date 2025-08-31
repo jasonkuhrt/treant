@@ -1,5 +1,5 @@
 {
-  "name": "test_identifier",
+  "name": "identifier",
   "rules": {
     "source_file": {
       "type": "SYMBOL",

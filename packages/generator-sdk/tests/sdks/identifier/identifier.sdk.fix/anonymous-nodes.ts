@@ -1,5 +1,5 @@
 /**
- * Anonymous node types for the test_identifier AST.
+ * Anonymous node types for the identifier AST.
  * @generated
  */
 

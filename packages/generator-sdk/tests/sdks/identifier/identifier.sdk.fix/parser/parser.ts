@@ -1,5 +1,5 @@
 /**
- * Parser utilities for test_identifier
+ * Parser utilities for identifier
  * @generated
  */
 
@@ -7,7 +7,7 @@ import { Parser, Language } from 'web-tree-sitter';
 import type { Tree } from 'web-tree-sitter';
 
 /**
- * Create and initialize a parser for test_identifier.
+ * Create and initialize a parser for identifier.
  * Automatically loads the WASM grammar from the artifacts directory.
  */
 export async function create(): Promise<Parser> {

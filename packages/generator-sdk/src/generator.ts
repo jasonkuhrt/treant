@@ -37,7 +37,7 @@ export async function generate(options: GenerateOptions): Promise<GeneratorOutpu
   // Extract grammar name
   const grammarName = grammarJson.name;
   const grammarNamePascal = nameOverride || (grammarName === 'graphql' ? 'GraphQL' : TS.toPascalCase(grammarName));
-  const grammarNamespaceExport = `TreeSitter${grammarNamePascal}`;
+  const grammarNamespaceExport = `Treant${grammarNamePascal}`;
 
   // Extract node types
   const namedNodes = nodeTypes.filter(node => node.named === true);

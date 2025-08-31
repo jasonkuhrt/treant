@@ -1,6 +1,6 @@
 /**
- * Namespace export for TreeSitterTestKeywords
+ * Namespace export for TreantKeywords
  * @generated
  */
 
-export * as TreeSitterTestKeywords from './$$.js';
+export * as TreantKeywords from './$$.js';

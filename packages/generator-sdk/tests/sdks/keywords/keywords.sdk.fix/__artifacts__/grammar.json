@@ -1,5 +1,5 @@
 {
-  "name": "test_keywords",
+  "name": "keywords",
   "rules": {
     "source_file": {
       "type": "SYMBOL",

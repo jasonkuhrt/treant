@@ -1,5 +1,5 @@
 /**
- * Parser utilities for test_keywords
+ * Parser utilities for keywords
  * @generated
  */
 
@@ -7,7 +7,7 @@ import { Parser, Language } from 'web-tree-sitter';
 import type { Tree } from 'web-tree-sitter';
 
 /**
- * Create and initialize a parser for test_keywords.
+ * Create and initialize a parser for keywords.
  * Automatically loads the WASM grammar from the artifacts directory.
  */
 export async function create(): Promise<Parser> {

@@ -4,7 +4,7 @@ import type { IdentifierNode } from './identifier.js';
 const TYPE = 'source_file' as const;
 
 /**
- * Represents a source file in the test_identifier AST.
+ * Represents a source file in the identifier AST.
  */
 export interface SourceFileNode extends Node {
   type: typeof TYPE;

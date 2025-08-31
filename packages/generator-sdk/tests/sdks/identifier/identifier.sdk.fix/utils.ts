@@ -1,5 +1,5 @@
 /**
- * Utility functions for test_identifier AST traversal.
+ * Utility functions for identifier AST traversal.
  * @generated
  */
 

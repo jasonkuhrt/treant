@@ -3,7 +3,7 @@ import type { Node } from 'web-tree-sitter';
 const TYPE = 'keyword' as const;
 
 /**
- * Represents a keyword in the test_keywords AST.
+ * Represents a keyword in the keywords AST.
  */
 export interface KeywordNode extends Node {
   type: typeof TYPE;

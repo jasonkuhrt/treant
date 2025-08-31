@@ -1,5 +1,5 @@
 /**
- * Generated TestIdentifier SDK
+ * Generated Identifier SDK
  * @generated
  */
 

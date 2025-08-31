@@ -1,5 +1,5 @@
 /**
- * Utility functions for test_keywords AST traversal.
+ * Utility functions for keywords AST traversal.
  * @generated
  */
 

@@ -1,5 +1,5 @@
 /**
- * Anonymous node types for the test_keywords AST.
+ * Anonymous node types for the keywords AST.
  * @generated
  */
 

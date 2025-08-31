@@ -1,5 +1,5 @@
 /**
- * Generated TestKeywords SDK
+ * Generated Keywords SDK
  * @generated
  */
 

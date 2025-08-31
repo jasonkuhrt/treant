@@ -98,6 +98,10 @@ importers:
       effect:
         specifier: ^3.17.9
         version: 3.17.9
+    devDependencies:
+      web-tree-sitter:
+        specifier: ^0.25.8
+        version: 0.25.8
 
   packages/grammar:
     dependencies:

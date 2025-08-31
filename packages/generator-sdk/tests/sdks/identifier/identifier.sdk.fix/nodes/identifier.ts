@@ -3,7 +3,7 @@ import type { Node } from 'web-tree-sitter';
 const TYPE = 'identifier' as const;
 
 /**
- * Represents a identifier in the test_identifier AST.
+ * Represents a identifier in the identifier AST.
  */
 export interface IdentifierNode extends Node {
   type: typeof TYPE;

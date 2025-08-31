@@ -3,7 +3,7 @@ import type { Node } from 'web-tree-sitter';
 const TYPE = 'a' as const;
 
 /**
- * Represents the anonymous 'a' node in the test_keywords AST.
+ * Represents the anonymous 'a' node in the keywords AST.
  */
 export interface A extends Node {
   type: typeof TYPE;
