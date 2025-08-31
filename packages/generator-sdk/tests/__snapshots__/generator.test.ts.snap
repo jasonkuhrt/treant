@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`includes grammar artifacts in generated files 1`] = `
+{
+  "content": "{
+  "name": "test_artifacts",
+  "rules": {
+    "source_file": {
+      "type": "SYMBOL",
+      "name": "expression"
+    },
+    "expression": {
+      "type": "STRING",
+      "value": "hello"
+    }
+  }
+}",
+  "path": "__artifacts__/grammar.json",
+}
+`;
+
+exports[`includes grammar artifacts in generated files 2`] = `
+{
+  "content": "[
+  {
+    "type": "source_file",
+    "named": true
+  },
+  {
+    "type": "expression",
+    "named": true
+  }
+]",
+  "path": "__artifacts__/node-types.json",
+}
+`;

@@ -1,27 +1,14 @@
 export * as Analysis from './analysis.js';
+export type { BuiltGrammar } from './built-grammar.js';
 export * as Dsl from './dsl.js';
-export { generate, generateAsync } from './generate.js';
-export type { GenerateError, GenerateOutput } from './generate.js';
-export type { GrammarJson } from './grammar-json.js';
-export type { NodeType } from './node-type.js';
+export { Rules } from './dsl.js';
+export { generate, generateAsync, generateAsyncWith, generateWith } from './generate.js';
+export type { GenerateError, GenerateOptions, GenerateOutput } from './generate.js';
 export { RuleKinds } from './rule-kinds/$.js';
 export { type RuleType } from './rule-type.js';
+export type { GrammarJson } from './schemas/grammar-json.js';
+export type { NodeType } from './schemas/node-type.js';
 export * as Testing from './testing/$$.js';
-
-export {
-  alias,
-  blank,
-  choice,
-  field,
-  grammar,
-  optional,
-  prec,
-  repeat,
-  repeat1,
-  seq,
-  sym,
-  token,
-} from './dsl.js';
 
 export type {
   AliasRule,

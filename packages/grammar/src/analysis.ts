@@ -7,10 +7,10 @@
  */
 
 import type { Rule } from './generated/dsl/types.js';
-import type { GrammarJson } from './grammar-json.js';
-import type { NodeType } from './node-type.js';
 import { RuleKinds } from './rule-kinds/$.js';
 import { Rules } from './rules/$.js';
+import { GrammarJson } from './schemas/grammar-json.js';
+import type { NodeType } from './schemas/node-type.js';
 
 /**
  * Parsed grammar information for comprehensive analysis
@@ -120,7 +120,7 @@ export function findSymbolReferences(grammar: GrammarJson, symbolName: string): 
   const references: string[] = [];
 
   for (const [ruleName, rule] of Object.entries(grammar.rules)) {
-    const childTypes = extractChildTypes(rule);
+    const childTypes = extractChildTypes(rule as Rule);
     if (childTypes.includes(symbolName)) {
       references.push(ruleName);
     }
@@ -264,7 +264,7 @@ export function analyzeGrammar(
     nodeTypeMap,
     childRelationships,
     parentRelationships,
-    grammarRules: grammarJson.rules,
+    grammarRules: grammarJson.rules as Record<string, Rule>,
   };
 }
 

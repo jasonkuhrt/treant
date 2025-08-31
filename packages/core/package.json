@@ -25,7 +25,6 @@
   "dependencies": {
     "@effect/platform": "^0.90.6",
     "@effect/platform-node": "^0.96.0",
-    "@treant/graphql-grammar": "workspace:*",
     "effect": "^3.17.9"
   }
 }

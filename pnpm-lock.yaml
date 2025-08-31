@@ -32,6 +32,9 @@ importers:
       vitest:
         specifier: ^3.2.4
         version: 3.2.4(@types/node@24.3.0)(tsx@4.20.5)(yaml@2.8.1)
+      web-tree-sitter:
+        specifier: ^0.25.8
+        version: 0.25.8
 
   packages/cli:
     dependencies:
@@ -68,9 +71,6 @@ importers:
       '@effect/platform-node':
         specifier: ^0.96.0
         version: 0.96.0(@effect/cluster@0.48.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/workflow@0.9.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9)
-      '@treant/graphql-grammar':
-        specifier: workspace:*
-        version: link:../graphql-grammar
       effect:
         specifier: ^3.17.9
         version: 3.17.9
@@ -92,9 +92,6 @@ importers:
       '@treant/grammar':
         specifier: workspace:*
         version: link:../grammar
-      '@treant/graphql-grammar':
-        specifier: workspace:*
-        version: link:../graphql-grammar
       effect:
         specifier: ^3.17.9
         version: 3.17.9
@@ -107,6 +104,9 @@ importers:
       '@effect/platform-node':
         specifier: ^0.68.1
         version: 0.68.2(@effect/platform@0.73.1(effect@3.17.9))(effect@3.17.9)
+      '@effect/schema':
+        specifier: ^0.75.5
+        version: 0.75.5(effect@3.17.9)
       effect:
         specifier: ^3.17.9
         version: 3.17.9
@@ -291,6 +291,12 @@ packages:
     peerDependencies:
       '@effect/platform': ^0.90.5
       effect: ^3.17.8
+
+  '@effect/schema@0.75.5':
+    resolution: {integrity: sha512-TQInulTVCuF+9EIbJpyLP6dvxbQJMphrnRqgexm/Ze39rSjfhJuufF7XvU3SxTgg3HnL7B/kpORTJbHhlE6thw==}
+    deprecated: this package has been merged into the main effect package
+    peerDependencies:
+      effect: ^3.9.2
 
   '@effect/sql@0.44.2':
     resolution: {integrity: sha512-DEcvriHvj88zu7keruH9NcHQzam7yQzLNLJO6ucDXMCAwWzYZSJOsmkxBznRFv8ylFtccSclKH2fuj+wRKPjCQ==}
@@ -1250,6 +1256,11 @@ snapshots:
     dependencies:
       '@effect/platform': 0.90.6(effect@3.17.9)
       effect: 3.17.9
+
+  '@effect/schema@0.75.5(effect@3.17.9)':
+    dependencies:
+      effect: 3.17.9
+      fast-check: 3.23.2
 
   '@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9)':
     dependencies:

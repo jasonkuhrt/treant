@@ -1,2 +1,2 @@
 export * as Types from './generated/dsl/types.js';
-export * from './generated/dsl/values.js';
+export * as Rules from './generated/dsl/values.js';

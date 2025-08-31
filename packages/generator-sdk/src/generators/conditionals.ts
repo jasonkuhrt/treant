@@ -31,7 +31,7 @@ export async function generateCursorConditionals(
   lines.push('  SiblingMap,');
   lines.push('  PositionalChildMap');
   lines.push('} from \'./maps.js\';');
-  lines.push('import type { TreeCursorGraphQL } from \'./cursor.js\';');
+  lines.push('import type { TreeCursor } from \'./cursor.js\';');
   lines.push('');
 
   // Generate conditional types for each navigation operation
@@ -44,45 +44,45 @@ export async function generateCursorConditionals(
   // Generate GotoFirstChild conditional type
   lines.push('  /**');
   lines.push('   * Conditional return type for gotoFirstChild() operation.');
-  lines.push('   * Returns TreeCursorGraphQL with child node type or null if no children.');
+  lines.push('   * Returns TreeCursor with child node type or null if no children.');
   lines.push('   */');
   lines.push('  export type GotoFirstChild<TParent extends string> = ');
   lines.push('    TParent extends keyof ChildMap');
-  lines.push('      ? TreeCursorGraphQL<ChildMap[TParent]> | null');
-  lines.push('      : TreeCursorGraphQL<string> | null;');
+  lines.push('      ? TreeCursor<ChildMap[TParent]> | null');
+  lines.push('      : TreeCursor<string> | null;');
   lines.push('');
 
   // Generate GotoNextSibling conditional type
   lines.push('  /**');
   lines.push('   * Conditional return type for gotoNextSibling() operation.');
-  lines.push('   * Returns TreeCursorGraphQL with sibling node type or null if no siblings.');
+  lines.push('   * Returns TreeCursor with sibling node type or null if no siblings.');
   lines.push('   */');
   lines.push('  export type GotoNextSibling<TCurrent extends string> = ');
   lines.push('    TCurrent extends keyof SiblingMap');
-  lines.push('      ? TreeCursorGraphQL<SiblingMap[TCurrent]> | null');
-  lines.push('      : TreeCursorGraphQL<string> | null;');
+  lines.push('      ? TreeCursor<SiblingMap[TCurrent]> | null');
+  lines.push('      : TreeCursor<string> | null;');
   lines.push('');
 
   // Generate GotoPreviousSibling conditional type
   lines.push('  /**');
   lines.push('   * Conditional return type for gotoPreviousSibling() operation.');
-  lines.push('   * Returns TreeCursorGraphQL with sibling node type or null if no siblings.');
+  lines.push('   * Returns TreeCursor with sibling node type or null if no siblings.');
   lines.push('   */');
   lines.push('  export type GotoPreviousSibling<TCurrent extends string> = ');
   lines.push('    TCurrent extends keyof SiblingMap');
-  lines.push('      ? TreeCursorGraphQL<SiblingMap[TCurrent]> | null');
-  lines.push('      : TreeCursorGraphQL<string> | null;');
+  lines.push('      ? TreeCursor<SiblingMap[TCurrent]> | null');
+  lines.push('      : TreeCursor<string> | null;');
   lines.push('');
 
   // Generate GotoParent conditional type
   lines.push('  /**');
   lines.push('   * Conditional return type for gotoParent() operation.');
-  lines.push('   * Returns TreeCursorGraphQL with parent node type or null if no parent.');
+  lines.push('   * Returns TreeCursor with parent node type or null if no parent.');
   lines.push('   */');
   lines.push('  export type GotoParent<TChild extends string> = ');
   lines.push('    TChild extends keyof ParentMap');
-  lines.push('      ? TreeCursorGraphQL<ParentMap[TChild]> | null');
-  lines.push('      : TreeCursorGraphQL<string> | null;');
+  lines.push('      ? TreeCursor<ParentMap[TChild]> | null');
+  lines.push('      : TreeCursor<string> | null;');
   lines.push('');
 
   // Generate exhaustive navigation paths for deep traversal
@@ -178,21 +178,21 @@ export async function generateCursorConditionals(
     // Field navigation
     lines.push('  export type NavigateToFieldName<T extends string> = ');
     lines.push('    T extends "field"');
-    lines.push('      ? TreeCursorGraphQL<"name"> | null');
+    lines.push('      ? TreeCursor<"name"> | null');
     lines.push('      : null;');
     lines.push('');
 
     // Type navigation
     lines.push('  export type NavigateToTypeName<T extends string> = ');
     lines.push('    T extends "named_type"');
-    lines.push('      ? TreeCursorGraphQL<"name"> | null');
+    lines.push('      ? TreeCursor<"name"> | null');
     lines.push('      : null;');
     lines.push('');
 
     // Fragment navigation
     lines.push('  export type NavigateToFragmentTarget<T extends string> = ');
     lines.push('    T extends "fragment_definition"');
-    lines.push('      ? TreeCursorGraphQL<"type_condition"> | null');
+    lines.push('      ? TreeCursor<"type_condition"> | null');
     lines.push('      : null;');
     lines.push('');
   }

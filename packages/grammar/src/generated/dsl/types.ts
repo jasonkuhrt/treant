@@ -4,7 +4,7 @@
  * AUTO-GENERATED FILE - DO NOT EDIT
  * Generated from tree-sitter-cli/dsl.d.ts
  * Run 'pnpm sync:types' to regenerate
- * 
+ *
  * NOTE: This file includes intentional divergences from upstream:
  * - Fixed: String -> string (using primitive type instead of constructor)
  */
@@ -54,10 +54,11 @@ export class RustRegex {
 
 export type RuleOrLiteral = Rule | RegExp | RustRegex | string;
 
-export type GrammarSymbols<RuleName extends string> = {
-  [name in RuleName]: SymbolRule<name>;
-} &
-  Record<string, SymbolRule<string>>;
+export type GrammarSymbols<RuleName extends string> =
+  & {
+    [name in RuleName]: SymbolRule<name>;
+  }
+  & Record<string, SymbolRule<string>>;
 
 export type RuleBuilder<RuleName extends string> = (
   $: GrammarSymbols<RuleName>,
@@ -66,10 +67,10 @@ export type RuleBuilder<RuleName extends string> = (
 
 export type RuleBuilders<
   RuleName extends string,
-  BaseGrammarRuleName extends string
+  BaseGrammarRuleName extends string,
 > = {
-    [name in RuleName]: RuleBuilder<RuleName | BaseGrammarRuleName>;
-  };
+  [name in RuleName]: RuleBuilder<RuleName | BaseGrammarRuleName>;
+};
 
 export interface Grammar<
   RuleName extends string,
@@ -77,7 +78,7 @@ export interface Grammar<
   Rules extends RuleBuilders<RuleName, BaseGrammarRuleName> = RuleBuilders<
     RuleName,
     BaseGrammarRuleName
-  >
+  >,
 > {
   /**
    * Name of the grammar language.
@@ -98,7 +99,7 @@ export interface Grammar<
   precedences?: (
     $: GrammarSymbols<RuleName | BaseGrammarRuleName>,
     previous: Rule[][],
-  ) => RuleOrLiteral[][],
+  ) => RuleOrLiteral[][];
 
   /**
    * An array of arrays of rule names. Each inner array represents a set of
@@ -181,9 +182,8 @@ export interface Grammar<
 }
 
 export type GrammarSchema<RuleName extends string> = {
-  [K in keyof Grammar<RuleName>]: K extends 'rules'
-  ? Record<RuleName, Rule>
-  : Grammar<RuleName>[K];
+  [K in keyof Grammar<RuleName>]: K extends 'rules' ? Record<RuleName, Rule>
+    : Grammar<RuleName>[K];
 };
 
 /**
@@ -403,9 +403,8 @@ declare function grammar<RuleName extends string>(
  */
 declare function grammar<
   BaseGrammarRuleName extends string,
-  RuleName extends string
+  RuleName extends string,
 >(
   baseGrammar: GrammarSchema<BaseGrammarRuleName>,
   options: Grammar<RuleName, BaseGrammarRuleName>,
 ): GrammarSchema<RuleName | BaseGrammarRuleName>;
-

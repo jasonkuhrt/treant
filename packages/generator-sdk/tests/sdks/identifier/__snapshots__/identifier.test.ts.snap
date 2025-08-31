@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Navigator > .create 1`] = `
+Node {
+  "0": 0,
+  "_children": undefined,
+  "_namedChildren": undefined,
+  "id": 105280,
+  "startIndex": 0,
+  "startPosition": {
+    "column": 0,
+    "row": 0,
+  },
+  "tree": Tree {
+    "0": 105280,
+    "language": Language {
+      "0": 104916,
+      "fields": [
+        null,
+      ],
+      "types": [
+        ,
+        "identifier",
+        "source_file",
+      ],
+    },
+    "textCallback": [Function],
+  },
+}
+`;
