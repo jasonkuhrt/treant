@@ -18,9 +18,13 @@
     "format": "dprint fmt",
     "format:check": "dprint check",
     "generate": "turbo run generate --filter=@treant/graphql-sdk",
-    "dev": "turbo run dev"
+    "dev": "turbo run dev",
+    "ship:stage": "changeset",
+    "ship": "tsx .changeset/ship.ts"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.6",
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^24.3.0",
