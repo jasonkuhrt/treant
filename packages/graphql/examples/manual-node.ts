@@ -1,7 +1,7 @@
-import { parse, TreantGraphQL } from '../src/$.js';
+import { TreantGraphQL } from '../build/$$.js';
 
-// Parse GraphQL code using the simplified API
-const tree = await parse(`
+// Parse GraphQL code using the SDK's parser
+const tree = await TreantGraphQL.Parser.parse(`
     query GetUser($id: ID!) {
       user(id: $id) {
         name

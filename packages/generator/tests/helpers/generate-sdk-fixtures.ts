@@ -17,7 +17,7 @@ const generateSdkFixtures = async () => {
   for (const caseDir of caseDirs) {
     const caseName = caseDir.name;
     const casePathBase = path.join(sdksDir, caseName);
-    const grammarFile = `${caseName}.grammar.fix.ts`;
+    const grammarFile = `fixture.grammar.ts`;
     const grammarPath = path.join(casePathBase, grammarFile);
 
     // Check if grammar file exists
@@ -44,8 +44,8 @@ const generateSdkFixtures = async () => {
       grammar: builtGrammar,
     });
 
-    // Generate SDK in case directory as caseName.sdk.fix
-    const sdkDir = path.join(casePathBase, `${caseName}.sdk.fix`);
+    // Generate SDK in case directory as fixture.sdk
+    const sdkDir = path.join(casePathBase, `fixture.sdk`);
     await emit(sdk, sdkDir);
 
     console.log(`  ✓ Generated WASM, artifacts and SDK for ${caseName}`);

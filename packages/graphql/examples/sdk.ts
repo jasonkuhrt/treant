@@ -1,4 +1,4 @@
-import { TreantGraphQL } from '../src/$.js';
+import { TreantGraphQL } from '../build/$$.js';
 
 // Example GraphQL query
 const query = `

@@ -20,13 +20,16 @@
   ],
   "exports": {
     ".": {
-      "import": "./build/$.js"
+      "import": "./build/$$.js"
     },
-    "./wasm": "@treant/graphql-grammar/wasm"
+    "./assets/wasm": "./assets/grammar.wasm",
+    "./assets/grammar.json": "./assets/grammar.json",
+    "./assets/node-types.json": "./assets/node-types.json",
+    "./assets/queries/highlights.scm": "./assets/queries/highlights.scm",
+    "./assets/queries/formatter.scm": "./assets/queries/formatter.scm"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "test": "vitest",
+    "build": "tsc -p tsconfig.build.json && tsx scripts/copy-assets.ts",
     "check:types": "tsc --noEmit"
   },
   "files": [

@@ -15,13 +15,17 @@
       "dependsOn": ["build"],
       "cache": false
     },
+    "test:ci": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
     "check:types": {
       "dependsOn": ["^build"],
       "outputs": [],
       "cache": true
     },
     "check": {
-      "dependsOn": ["check:types", "test"],
+      "dependsOn": ["check:types", "test:ci"],
       "outputs": [],
       "cache": false
     },

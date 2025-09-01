@@ -11,10 +11,10 @@ npm install @treant/graphql
 ## Usage
 
 ```typescript
-import { parse, Node } from '@treant/graphql';
+import { TreantGraphQL } from '@treant/graphql';
 
 // Parse GraphQL
-const tree = await parse(`
+const tree = await TreantGraphQL.Parser.parse(`
   query GetUser($id: ID!) {
     user(id: $id) {
       name
@@ -24,30 +24,36 @@ const tree = await parse(`
 `);
 
 // Type-safe AST access
-if (Node.isOperationDefinition(tree.rootNode)) {
+if (TreantGraphQL.Node.isOperationDefinition(tree.rootNode)) {
   console.log('Query operation');
 }
 
-// Find all fields
-const fields = tree.rootNode
-  .descendantsOfType('field')
-  .map(f => f.text);
+// Navigate with type safety
+const navigator = await TreantGraphQL.Navigator.create(tree);
+const fieldName = navigator
+  .child() // to document
+  .child() // to operation_definition  
+  .selectionSet()
+  .selections()
+  .at(0)
+  ?.name();
 ```
 
 ## What's Included
 
-- WASM parser binary
-- TypeScript SDK with full type safety
-- Auto-initialization
+- Pre-compiled WASM parser
+- Complete TypeScript SDK
+- Type guards for all node types
+- Type-safe navigation API
 - Tree traversal utilities
+- Grammar assets (JSON, query files)
 
-## Sync Parsing
+## Also Exports Assets
 
-```typescript
-import { initializeParser, parseSync } from '@treant/graphql';
-
-await initializeParser(); // Once at startup
-const tree = parseSync(code); // Fast sync parsing
+```javascript
+// Access WASM and grammar files directly
+const wasmPath = require.resolve('@treant/graphql/assets/wasm');
+const grammarPath = require.resolve('@treant/graphql/assets/grammar.json');
 ```
 
 ## License

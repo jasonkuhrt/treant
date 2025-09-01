@@ -15,8 +15,13 @@ npm install -g @treant/cli
 Generate a TypeScript SDK from a Tree-sitter grammar:
 
 ```bash
-treant generate library --grammar graphql --output ./src-generated
+treant generate library --grammar ./path/to/grammar/src --output ./src-generated
 ```
+
+Options:
+- `--grammar, -g` - Path to directory containing grammar.json and node-types.json
+- `--output, -o` - Output directory (default: src-generated)
+- `--name, -n` - Display name override (e.g., "GraphQL")
 
 ## Commands
 

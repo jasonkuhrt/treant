@@ -13,36 +13,36 @@ Note: `web-tree-sitter` is a peer dependency.
 ## Usage
 
 ```typescript
-import { Parser } from 'web-tree-sitter';
-import { Node, Utils, Cursor } from '@treant/graphql-sdk';
+import { TreantGraphQLSdk } from '@treant/graphql-sdk';
 
-// Parse (see @treant/graphql-grammar for parser setup)
-const tree = parser.parse(`query { user { name } }`);
+// Initialize parser
+const parser = await TreantGraphQLSdk.Parser.init();
+
+// Parse GraphQL
+const tree = await TreantGraphQLSdk.Parser.parse(`query { user { name } }`);
 
 // Type guards
-if (Node.isOperationDefinition(tree.rootNode)) {
+if (TreantGraphQLSdk.Node.isOperationDefinition(tree.rootNode)) {
   // typed as OperationDefinition
 }
 
-// Find nodes
-const fields = Utils.findChildrenByType(tree.rootNode, 'field');
-
-// Cursor navigation
-const cursor = Cursor.create(tree.rootNode);
-const name = cursor
-  .child('operation_definition')
-  .child('selection_set')
-  .child('field')
-  .child('name');
+// Navigate with type safety
+const navigator = await TreantGraphQLSdk.Navigator.create(tree);
+const field = navigator
+  .child() // to document
+  .child() // to operation_definition
+  .selectionSet()
+  .selections()
+  .at(0);
 ```
 
 ## API
 
-- **Node** - All AST node types and guards
+- **Parser** - Initialize and parse GraphQL
+- **Node** - All AST node types and type guards
+- **Navigator** - Type-safe chainable navigation
+- **Cursor** - Low-level cursor API
 - **Utils** - Tree traversal utilities
-- **Cursor** - Type-safe navigation
-- **Extractors** - Query helpers
-- **Metadata** - AST introspection
 
 ## Development
 

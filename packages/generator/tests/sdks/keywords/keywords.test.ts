@@ -1,6 +1,6 @@
 import { describe, expect, expectTypeOf, test } from 'vitest';
 import { catchOrThrow } from '../../helpers/utils.js';
-import { TreantKeywords as Sdk } from './keywords.sdk.fix/$.js';
+import { TreantKeywords as Sdk } from './fixture.sdk/$.js';
 
 const sources = { a: 'a', b: 'b', c: 'c' };
 

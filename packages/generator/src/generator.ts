@@ -451,22 +451,32 @@ export async function generate(options: GenerateOptions): Promise<GeneratorOutpu
  * @param grammarDir - Directory containing grammar.json and node-types.json
  * @returns A BuiltGrammar containing all grammar artifacts
  */
-export async function loadGrammar(grammarDir: string): Promise<Grammar.BuiltGrammar> {
+export async function loadGrammar(grammarDir: string): Promise<Grammar.BuiltGrammar & { wasm?: Buffer }> {
   const fs = await import('node:fs/promises');
   const path = await import('node:path');
   
   const grammarPath = path.join(grammarDir, 'grammar.json');
   const nodeTypesPath = path.join(grammarDir, 'node-types.json');
+  const wasmPath = path.join(grammarDir, '..', 'grammar.wasm'); // Check in parent directory
   
   const [grammarContent, nodeTypesContent] = await Promise.all([
     fs.readFile(grammarPath, 'utf-8'),
     fs.readFile(nodeTypesPath, 'utf-8'),
   ]);
   
+  // Try to load WASM file if it exists
+  let wasmBuffer: Buffer | undefined;
+  try {
+    wasmBuffer = await fs.readFile(wasmPath);
+  } catch {
+    // WASM file doesn't exist, that's okay
+  }
+  
   return {
     grammarJson: JSON.parse(grammarContent),
     nodeTypes: JSON.parse(nodeTypesContent),
     parserC: '', // Not available when loading from disk - would need to run tree-sitter generate
+    ...(wasmBuffer ? { wasm: wasmBuffer } : {}),
   };
 }
 

@@ -15,13 +15,19 @@
   },
   "files": [
     "src",
-    "grammar.wasm"
+    "grammar.wasm",
+    "queries"
   ],
   "exports": {
-    "./package.json": "./package.json",
     "./grammar.json": "./src/grammar.json",
     "./node-types.json": "./src/node-types.json",
-    "./wasm": "./grammar.wasm"
+    "./parser.c": "./src/parser.c",
+    "./wasm": "./grammar.wasm",
+    "./queries/highlights.scm": "./queries/graphql/highlights.scm",
+    "./queries/formatter.scm": "./queries/graphql/formatter.scm",
+    "./headers/parser.h": "./src/tree_sitter/parser.h",
+    "./headers/alloc.h": "./src/tree_sitter/alloc.h",
+    "./headers/array.h": "./src/tree_sitter/array.h"
   },
   "scripts": {
     "build": "tree-sitter generate grammar.js && pnpm build:wasm",

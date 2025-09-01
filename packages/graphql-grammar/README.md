@@ -1,18 +1,30 @@
 # @treant/graphql-grammar
 
-Tree-sitter GraphQL grammar definition (internal package).
+Tree-sitter GraphQL grammar assets.
 
-## Structure
+## What's Included
 
+- Pre-compiled WASM parser (`grammar.wasm`)
+- Grammar definition (`grammar.json`)
+- Node types (`node-types.json`)
+- Query files for syntax highlighting and formatting
+- C header files for native compilation
+
+## Installation
+
+```bash
+npm install @treant/graphql-grammar
 ```
-grammar.js          # Grammar source
-src/               # Generated C parser (gitignored)
-  ├── grammar.json
-  ├── node-types.json
-  └── parser.c
+
+## Usage
+
+This is an asset-only package. Files can be accessed via `require.resolve()`:
+
+```javascript
+const wasmPath = require.resolve('@treant/graphql-grammar/wasm');
+const grammarPath = require.resolve('@treant/graphql-grammar/grammar.json');
 ```
 
-## Notes
+## License
 
-- `src/` contains generated files (gitignored)
-- Tree-sitter expects generated files in `src/` for WASM compilation
+MIT
