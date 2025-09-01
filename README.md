@@ -1,22 +1,33 @@
 # Treant
 
-A set of tree-sitter packages oriented around optimal type safety and ease of use.
+A TypeScript-first toolkit for working with Tree-sitter grammars. Generate type-safe SDKs from any Tree-sitter grammar with full IDE support (via TypeScript typings).
 
-| Package                                               | Description                                                     |
-| ----------------------------------------------------- | --------------------------------------------------------------- |
-| [`@treant/cli`](packages/cli)                         | Command-line interface for Treant tools                         |
-| [`@treant/core`](packages/core)                       | Core utilities shared across Treant packages                    |
-| [`@treant/generator`](packages/generator)             | TypeScript SDK generator for tree-sitter grammars               |
-| [`@treant/grammar`](packages/grammar)                 | Grammar type definitions and functions to navigate grammar data |
-| [`@treant/graphql`](packages/graphql)                 | GraphQL high level package wrapping all others                  |
-| [`@treant/graphql-sdk`](packages/graphql-sdk)         | GraphQL SDK (generated)                                         |
-| [`@treant/graphql-grammar`](packages/graphql-grammar) | GraphQL grammar definition and WASM parser                      |
+## Packages
 
-## Release Process
+| Package                                   | Version                                                                                                       | Description                                 |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
+| [`@treant/graphql`](packages/graphql)     | [![npm](https://img.shields.io/npm/v/@treant/graphql.svg)](https://www.npmjs.com/package/@treant/graphql)     | Complete GraphQL parser with TypeScript SDK |
+| [`@treant/cli`](packages/cli)             | [![npm](https://img.shields.io/npm/v/@treant/cli.svg)](https://www.npmjs.com/package/@treant/cli)             | CLI for generating SDKs from grammars       |
+| [`@treant/generator`](packages/generator) | [![npm](https://img.shields.io/npm/v/@treant/generator.svg)](https://www.npmjs.com/package/@treant/generator) | SDK generator for Tree-sitter grammars      |
+| [`@treant/grammar`](packages/grammar)     | [![npm](https://img.shields.io/npm/v/@treant/grammar.svg)](https://www.npmjs.com/package/@treant/grammar)     | TypeScript types for Tree-sitter grammars   |
+| [`@treant/core`](packages/core)           | [![npm](https://img.shields.io/npm/v/@treant/core.svg)](https://www.npmjs.com/package/@treant/core)           | Core utilities                              |
 
-This monorepo uses [changesets](https://github.com/changesets/changesets) for managing releases.
+### GraphQL-specific
 
-### Creating a Release
+| Package                                               | Version                                                                                                                   | Description                          |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| [`@treant/graphql-sdk`](packages/graphql-sdk)         | [![npm](https://img.shields.io/npm/v/@treant/graphql-sdk.svg)](https://www.npmjs.com/package/@treant/graphql-sdk)         | Generated TypeScript SDK for GraphQL |
+| [`@treant/graphql-grammar`](packages/graphql-grammar) | [![npm](https://img.shields.io/npm/v/@treant/graphql-grammar.svg)](https://www.npmjs.com/package/@treant/graphql-grammar) | GraphQL grammar assets (WASM, JSON)  |
+
+## Development
+
+This is a monorepo managed with pnpm and Turbo.
+
+### Release Process
+
+We use [changesets](https://github.com/changesets/changesets) for managing releases.
+
+#### Creating a Release
 
 1. **Stage changes**: When you have changes ready to release, run:
    ```bash
@@ -30,7 +41,7 @@ This monorepo uses [changesets](https://github.com/changesets/changesets) for ma
 
 2. **Ship the release**: When ready to publish, run:
    ```bash
-   pnpm ship
+   pnpm ship:release
    ```
    This will:
    - Build all packages (fails fast if broken)
@@ -41,7 +52,12 @@ This monorepo uses [changesets](https://github.com/changesets/changesets) for ma
    - Push to GitHub
    - Create GitHub releases with changelogs
 
-### Notes
+3. **GitHub releases only** (if needed):
+   ```bash
+   pnpm ship:release:github
+   ```
+
+#### Notes
 
 - No changesets are needed during development, just when releasing
 - Each package gets its own version, git tag, and GitHub release
