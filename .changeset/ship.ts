@@ -1,63 +1,143 @@
 #!/usr/bin/env tsx
 
+import { Command, Options } from '@effect/cli';
+import { NodeContext, NodeRuntime } from '@effect/platform-node';
+import { Console, Effect, pipe } from 'effect';
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, unlinkSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const exec = (command: string, options?: { capture?: boolean }) => {
-  console.log(`\n→ ${command}`);
-  if (options?.capture) {
-    return execSync(command, { encoding: 'utf8' }).trim();
-  }
-  execSync(command, { stdio: 'inherit' });
-};
+// Shell execution service
+class ShellError {
+  readonly _tag = 'ShellError';
+  constructor(readonly message: string, readonly command: string) {}
+}
 
-const extractChangelogForVersion = (changelogPath: string, version: string): string => {
-  try {
-    const changelog = readFileSync(changelogPath, 'utf8');
-    // Match the version section - handles both ## 1.0.0 and ## 1.0.0 (date)
-    const versionRegex = new RegExp(
-      `## ${version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\s|\\().*?(?=## \\d|$)`,
-      's',
-    );
-    const match = changelog.match(versionRegex);
-
-    if (match) {
-      // Clean up the content - remove the version header line and trim
-      const content = match[0]
-        .replace(/^## .*$/m, '')
-        .trim();
-      return content || 'Release notes not available';
+const exec = (command: string, options?: { capture?: boolean }) =>
+  Effect.sync(() => {
+    Console.log(`→ ${command}`).pipe(Effect.runSync);
+    if (options?.capture) {
+      return execSync(command, { encoding: 'utf8' }).trim();
     }
-    return 'Release notes not available';
-  }
-  catch {
-    return 'Release notes not available';
-  }
+    execSync(command, { stdio: 'inherit' });
+    return '';
+  }).pipe(
+    Effect.mapError((error) => new ShellError(String(error), command)),
+  );
+
+// Changelog extraction
+const extractChangelogForVersion = (changelogPath: string, version: string) =>
+  Effect.sync(() => {
+    try {
+      const changelog = readFileSync(changelogPath, 'utf8');
+      const versionRegex = new RegExp(
+        `## ${version.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:\\s|\\().*?(?=## \\d|$)`,
+        's',
+      );
+      const match = changelog.match(versionRegex);
+
+      if (match) {
+        const content = match[0]
+          .replace(/^## .*$/m, '')
+          .trim();
+        return content || 'Release notes not available';
+      }
+      return 'Release notes not available';
+    }
+    catch {
+      return 'Release notes not available';
+    }
+  });
+
+// Parse tag into package name and version
+const parseTag = (tag: string) => {
+  const lastAtIndex = tag.lastIndexOf('@');
+  return {
+    packageName: tag.substring(0, lastAtIndex),
+    version: tag.substring(lastAtIndex + 1),
+  };
 };
 
-const main = async () => {
-  console.log('■ Starting release process...\n');
+// Create GitHub release for a tag
+const createGitHubRelease = (tag: string) =>
+  Effect.gen(function*() {
+    const { packageName, version } = parseTag(tag);
+    const packageNameWithoutScope = packageName.replace('@treant/', '');
+    const packageDir = join('packages', packageNameWithoutScope);
+    const changelogPath = join(packageDir, 'CHANGELOG.md');
 
-  // Step 1: Build all packages first (fail fast)
-  console.log('▶ Building all packages...');
-  exec('pnpm build');
+    const changelogContent = yield* extractChangelogForVersion(changelogPath, version);
 
-  // Step 2: Version packages using changesets
-  console.log('\n▶ Applying version changes...');
-  exec('pnpm changeset version');
+    yield* Console.log(`  Creating release for ${tag}...`);
 
-  // Step 3: Commit version changes
-  console.log('\n▶ Committing version changes...');
-  exec('git add -A');
-  exec('git commit -m "chore: version packages"');
+    const tempFile = `/tmp/release-notes-${Date.now()}.md`;
 
-  // Step 4: Publish packages and capture output to get tags
-  console.log('\n▶ Publishing packages to npm...');
-  const publishOutput = exec('pnpm changeset publish', { capture: true });
+    yield* Effect.try({
+      try: () => {
+        writeFileSync(tempFile, changelogContent);
+        execSync(`gh release create "${tag}" --title "${tag}" --notes-file "${tempFile}"`, { stdio: 'inherit' });
+        unlinkSync(tempFile);
+        return Console.log(`  ✓ Release created for ${tag}`);
+      },
+      catch: (error) => {
+        try {
+          unlinkSync(tempFile);
+        }
+        catch {}
+        return Console.error(`  ✗ Failed to create release for ${tag}: ${error}`);
+      },
+    }).pipe(Effect.flatten);
+  });
 
-  // Parse the publish output to find the created tags
-  // Changesets outputs lines like: "New tag: @treant/graphql@1.0.0"
+// GitHub-only release flow
+const createGitHubReleasesOnly = Effect.gen(function*() {
+  yield* Console.log('■ Creating GitHub releases for existing tags...\n');
+
+  const tagsOutput = yield* exec('git tag -l "*@*"', { capture: true });
+
+  if (!tagsOutput) {
+    yield* Console.log('No package tags found');
+    return;
+  }
+
+  const tags = tagsOutput.split('\n').filter(Boolean);
+  yield* Console.log(`Found ${tags.length} package tags`);
+
+  const existingReleases = yield* exec('gh release list --limit 100', { capture: true });
+
+  for (const tag of tags) {
+    if (existingReleases.includes(tag)) {
+      yield* Console.log(`  ✓ Release already exists for ${tag}`);
+      continue;
+    }
+    yield* createGitHubRelease(tag);
+  }
+
+  yield* Console.log('\n✓ GitHub releases created!');
+});
+
+// Full release flow
+const fullRelease = Effect.gen(function*() {
+  yield* Console.log('■ Starting release process...\n');
+
+  // Step 1: Build
+  yield* Console.log('▶ Building all packages...');
+  yield* exec('pnpm build');
+
+  // Step 2: Version
+  yield* Console.log('\n▶ Applying version changes...');
+  yield* exec('pnpm changeset version');
+
+  // Step 3: Commit
+  yield* Console.log('\n▶ Committing version changes...');
+  yield* exec('git add -A');
+  yield* exec('git commit -m "chore: version packages"');
+
+  // Step 4: Publish
+  yield* Console.log('\n▶ Publishing packages to npm...');
+  const publishOutput = yield* exec('pnpm changeset publish', { capture: true });
+
+  // Parse tags from output
   const tagRegex = /New tag:\s+(.*)/g;
   const tags: string[] = [];
   let match;
@@ -66,57 +146,41 @@ const main = async () => {
   }
 
   if (tags.length === 0) {
-    console.log('\n⚠ No new packages were published');
+    yield* Console.log('\n⚠ No new packages were published');
     return;
   }
 
-  console.log(`\n▶ Created tags: ${tags.join(', ')}`);
+  yield* Console.log(`\n▶ Created tags: ${tags.join(', ')}`);
 
-  // Step 5: Push commits and tags to GitHub
-  console.log('\n▶ Pushing to GitHub...');
-  exec('git push --follow-tags');
+  // Step 5: Push
+  yield* Console.log('\n▶ Pushing to GitHub...');
+  yield* exec('git push --follow-tags');
 
-  // Step 6: Create GitHub releases for each tag
-  console.log('\n▶ Creating GitHub releases...');
+  // Step 6: Create releases
+  yield* Console.log('\n▶ Creating GitHub releases...');
+  yield* Effect.forEach(tags, createGitHubRelease, { concurrency: 'unbounded' });
 
-  for (const tag of tags) {
-    // Extract package name and version from tag
-    // Tags are like: @treant/graphql@1.0.0 or package-name@1.0.0
-    const lastAtIndex = tag.lastIndexOf('@');
-    const packageName = tag.substring(0, lastAtIndex);
-    const version = tag.substring(lastAtIndex + 1);
-
-    // Determine the package directory
-    const packageNameWithoutScope = packageName.replace('@treant/', '');
-    const packageDir = join('packages', packageNameWithoutScope);
-    const changelogPath = join(packageDir, 'CHANGELOG.md');
-
-    // Extract changelog content for this version
-    const changelogContent = extractChangelogForVersion(changelogPath, version);
-
-    // Create GitHub release
-    console.log(`\n  Creating release for ${tag}...`);
-    try {
-      // Write changelog to temp file to avoid shell escaping issues
-      const tempFile = `/tmp/release-notes-${Date.now()}.md`;
-      require('fs').writeFileSync(tempFile, changelogContent);
-
-      exec(`gh release create "${tag}" --title "${tag}" --notes-file "${tempFile}"`);
-
-      // Clean up temp file
-      require('fs').unlinkSync(tempFile);
-
-      console.log(`  ✓ Release created for ${tag}`);
-    }
-    catch (error) {
-      console.error(`  ✗ Failed to create release for ${tag}:`, error);
-    }
-  }
-
-  console.log('\n✓ Release process complete!');
-};
-
-main().catch((error) => {
-  console.error('\n✗ Release failed:', error);
-  process.exit(1);
+  yield* Console.log('\n✓ Release process complete!');
 });
+
+// CLI command
+const shipCommand = Command.make('ship', {
+  githubOnly: Options.boolean('github-only').pipe(
+    Options.withAlias('g'),
+    Options.withDescription('Only create GitHub releases for existing tags'),
+    Options.withDefault(false),
+  ),
+}, ({ githubOnly }) => githubOnly ? createGitHubReleasesOnly : fullRelease);
+
+// Main CLI app
+const cli = Command.run(shipCommand, {
+  name: 'ship',
+  version: '1.0.0',
+});
+
+// Run the CLI
+pipe(
+  cli(process.argv.slice(2)),
+  Effect.provide(NodeContext.layer),
+  NodeRuntime.runMain,
+);

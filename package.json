@@ -18,15 +18,20 @@
     "generate": "turbo run generate --filter=@treant/graphql-sdk",
     "dev": "turbo run dev",
     "ship:stage": "changeset",
-    "ship": "tsx .changeset/ship.ts"
+    "ship:release": "tsx .changeset/ship.ts",
+    "ship:release:github": "tsx .changeset/ship.ts --github-only"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.1",
     "@changesets/cli": "^2.29.6",
+    "@effect/cli": "^0.69.2",
+    "@effect/platform": "^0.90.6",
+    "@effect/platform-node": "^0.96.0",
     "@tsconfig/node24": "^24.0.1",
     "@tsconfig/strictest": "^2.0.5",
     "@types/node": "^24.3.0",
     "dprint": "^0.50.1",
+    "effect": "^3.17.9",
     "tsx": "^4.20.5",
     "turbo": "^2.5.6",
     "typescript": "^5.9.2",
