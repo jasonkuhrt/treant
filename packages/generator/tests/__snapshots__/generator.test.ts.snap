@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`includes grammar artifacts in generated files 1`] = `
+exports[`includes grammar artifacts in generated files when emitArtifacts is true 1`] = `
 {
   "content": "{
   "name": "test_artifacts",
@@ -19,7 +19,7 @@ exports[`includes grammar artifacts in generated files 1`] = `
 }
 `;
 
-exports[`includes grammar artifacts in generated files 2`] = `
+exports[`includes grammar artifacts in generated files when emitArtifacts is true 2`] = `
 {
   "content": "[
   {

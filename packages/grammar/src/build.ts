@@ -147,8 +147,21 @@ export const build = <RuleName extends string>(
         // Use provided dir or create temp dir
         const outputDir = dir ?? (yield* fs.makeTempDirectory({ prefix: 'treant-grammar-' }));
 
+        // Create package.json to make ESM work
+        const packageJson = {
+          type: 'module',
+          dependencies: {
+            'tree-sitter-cli': '*'
+          }
+        };
+        yield* fs.writeFileString(`${outputDir}/package.json`, JSON.stringify(packageJson, null, 2));
+
         // Write grammar.js
         yield* fs.writeFileString(`${outputDir}/grammar.js`, grammarJs);
+        
+        // Debug: log what we're writing
+        console.log('Writing grammar.js to:', outputDir);
+        console.log('Grammar content preview:', grammarJs.substring(0, 200));
 
         // Create src directory for tree-sitter output
         const srcDir = `${outputDir}/src`;
@@ -165,6 +178,8 @@ export const build = <RuleName extends string>(
               Effect.fail(new GenerateError({ message: `Failed to run tree-sitter: ${error.message}`, cause: error })),
           ),
         );
+
+        // Just use exitCode for now, stderr capture was causing type issues
 
         const exitCode = yield* process.exitCode;
 

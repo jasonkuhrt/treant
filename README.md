@@ -1,23 +1,16 @@
 # Treant
 
-A TypeScript-first toolkit for working with Tree-sitter grammars. Generate type-safe SDKs from any Tree-sitter grammar with full IDE support (via TypeScript typings).
+TypeScript-first toolkit for Tree-sitter grammars. Generate type-safe SDKs with full IDE support.
 
 ## Packages
 
-| Package                                   | Version                                                                                                       | Description                                 |
-| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| [`@treant/graphql`](packages/graphql)     | [![npm](https://img.shields.io/npm/v/@treant/graphql.svg)](https://www.npmjs.com/package/@treant/graphql)     | Complete GraphQL parser with TypeScript SDK |
-| [`@treant/cli`](packages/cli)             | [![npm](https://img.shields.io/npm/v/@treant/cli.svg)](https://www.npmjs.com/package/@treant/cli)             | CLI for generating SDKs from grammars       |
-| [`@treant/generator`](packages/generator) | [![npm](https://img.shields.io/npm/v/@treant/generator.svg)](https://www.npmjs.com/package/@treant/generator) | SDK generator for Tree-sitter grammars      |
-| [`@treant/grammar`](packages/grammar)     | [![npm](https://img.shields.io/npm/v/@treant/grammar.svg)](https://www.npmjs.com/package/@treant/grammar)     | TypeScript types for Tree-sitter grammars   |
-| [`@treant/core`](packages/core)           | [![npm](https://img.shields.io/npm/v/@treant/core.svg)](https://www.npmjs.com/package/@treant/core)           | Core utilities                              |
-
-### GraphQL-specific
-
-| Package                                               | Version                                                                                                                   | Description                          |
-| ----------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| [`@treant/graphql-sdk`](packages/graphql-sdk)         | [![npm](https://img.shields.io/npm/v/@treant/graphql-sdk.svg)](https://www.npmjs.com/package/@treant/graphql-sdk)         | Generated TypeScript SDK for GraphQL |
-| [`@treant/graphql-grammar`](packages/graphql-grammar) | [![npm](https://img.shields.io/npm/v/@treant/graphql-grammar.svg)](https://www.npmjs.com/package/@treant/graphql-grammar) | GraphQL grammar assets (WASM, JSON)  |
+| Package                                   | Version                                                                                                       | Description                    |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| [`@treant/graphql`](packages/graphql)     | [![npm](https://img.shields.io/npm/v/@treant/graphql.svg)](https://www.npmjs.com/package/@treant/graphql)     | GraphQL parser with TypeScript SDK |
+| [`@treant/cli`](packages/cli)             | [![npm](https://img.shields.io/npm/v/@treant/cli.svg)](https://www.npmjs.com/package/@treant/cli)             | CLI for generating SDKs        |
+| [`@treant/generator`](packages/generator) | [![npm](https://img.shields.io/npm/v/@treant/generator.svg)](https://www.npmjs.com/package/@treant/generator) | SDK generator                  |
+| [`@treant/grammar`](packages/grammar)     | [![npm](https://img.shields.io/npm/v/@treant/grammar.svg)](https://www.npmjs.com/package/@treant/grammar)     | Grammar TypeScript types       |
+| [`@treant/core`](packages/core)           | [![npm](https://img.shields.io/npm/v/@treant/core.svg)](https://www.npmjs.com/package/@treant/core)           | Core utilities                 |
 
 ## Development
 

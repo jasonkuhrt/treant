@@ -33,6 +33,7 @@
     "@effect/printer-ansi": "^0.45.0",
     "@treant/core": "workspace:*",
     "@treant/generator": "workspace:*",
+    "@treant/grammar": "workspace:*",
     "effect": "^3.17.9"
   },
   "publishConfig": {

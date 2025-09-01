@@ -74,6 +74,9 @@ importers:
       '@treant/generator':
         specifier: workspace:*
         version: link:../generator
+      '@treant/grammar':
+        specifier: workspace:*
+        version: link:../grammar
       effect:
         specifier: ^3.17.9
         version: 3.17.9
@@ -118,11 +121,11 @@ importers:
   packages/grammar:
     dependencies:
       '@effect/platform':
-        specifier: ^0.73.1
-        version: 0.73.1(effect@3.17.9)
+        specifier: ^0.90.6
+        version: 0.90.6(effect@3.17.9)
       '@effect/platform-node':
-        specifier: ^0.68.1
-        version: 0.68.2(@effect/platform@0.73.1(effect@3.17.9))(effect@3.17.9)
+        specifier: ^0.96.0
+        version: 0.96.0(@effect/cluster@0.48.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/workflow@0.9.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9)
       '@effect/schema':
         specifier: ^0.75.5
         version: 0.75.5(effect@3.17.9)
@@ -135,9 +138,6 @@ importers:
 
   packages/graphql:
     dependencies:
-      '@treant/graphql-grammar':
-        specifier: workspace:*
-        version: link:../graphql-grammar
       '@treant/graphql-sdk':
         specifier: workspace:*
         version: link:../graphql-sdk
@@ -145,6 +145,9 @@ importers:
         specifier: ^0.25.0
         version: 0.25.8
     devDependencies:
+      '@treant/cli':
+        specifier: workspace:*
+        version: link:../cli
       '@treant/grammar':
         specifier: workspace:*
         version: link:../grammar
@@ -312,12 +315,6 @@ packages:
       lmdb:
         optional: true
 
-  '@effect/platform-node-shared@0.22.2':
-    resolution: {integrity: sha512-LRmcC2NSzxdJLXc22tHuTau63Mn/TjOz5UKEAcVCOrNTnDx1zXTP4UwDTkvlko6P8PEUElMqjcUOr2jwR19/UQ==}
-    peerDependencies:
-      '@effect/platform': ^0.72.2
-      effect: ^3.12.2
-
   '@effect/platform-node-shared@0.49.0':
     resolution: {integrity: sha512-6ufPQUtofYW+jsADRI4Pa4sMY+kc0dcoXWpH1ozH/bD6I5c2au1n/wDffnLoXMeHGYSpt/54Dd7WOqqNcOdXlg==}
     peerDependencies:
@@ -327,12 +324,6 @@ packages:
       '@effect/sql': ^0.44.1
       effect: ^3.17.7
 
-  '@effect/platform-node@0.68.2':
-    resolution: {integrity: sha512-+eufA82A1ObZWrWDPPcCCRpo+WZ5J32oeA3VDSiznqKcd97FxlHMf4M8WoHt/sx4zxpKrGPwTlnKXCTENiXU0Q==}
-    peerDependencies:
-      '@effect/platform': ^0.72.2
-      effect: ^3.12.2
-
   '@effect/platform-node@0.96.0':
     resolution: {integrity: sha512-9v6UJnSiQGq90gYPdakcLjkyX951ZODLwtkZgXjdKwjvcpx5C1Feq+LDsSifF3aOg1NgamwAGYDKi00JQxK6Cg==}
     peerDependencies:
@@ -341,11 +332,6 @@ packages:
       '@effect/rpc': ^0.69.0
       '@effect/sql': ^0.44.1
       effect: ^3.17.7
-
-  '@effect/platform@0.73.1':
-    resolution: {integrity: sha512-aFwHLtTDdWnK0UUGs6Z8QbjVA6XBKp8xzEt4G9lm5c0JALiUrhoWe8e9fpkUMuejF3W0+VeDM3AC+1eglnGQww==}
-    peerDependencies:
-      effect: ^3.12.4
 
   '@effect/platform@0.90.6':
     resolution: {integrity: sha512-aT7aLJR1+rYrSLdw5af2UZzwnWoAy8WmkTxTUD3pFY6vjFmh+8137RhbwKiWjIJBTm2DVyPXl1dx1kGg28xt6Q==}
@@ -1718,13 +1704,6 @@ snapshots:
       effect: 3.17.9
       uuid: 11.1.0
 
-  '@effect/platform-node-shared@0.22.2(@effect/platform@0.73.1(effect@3.17.9))(effect@3.17.9)':
-    dependencies:
-      '@effect/platform': 0.73.1(effect@3.17.9)
-      '@parcel/watcher': 2.5.1
-      effect: 3.17.9
-      multipasta: 0.2.7
-
   '@effect/platform-node-shared@0.49.0(@effect/cluster@0.48.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/workflow@0.9.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9)':
     dependencies:
       '@effect/cluster': 0.48.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/sql@0.44.2(@effect/experimental@0.54.6(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(@effect/workflow@0.9.2(@effect/platform@0.90.6(effect@3.17.9))(@effect/rpc@0.69.1(@effect/platform@0.90.6(effect@3.17.9))(effect@3.17.9))(effect@3.17.9))(effect@3.17.9)
@@ -1734,18 +1713,6 @@ snapshots:
       '@parcel/watcher': 2.5.1
       effect: 3.17.9
       multipasta: 0.2.7
-      ws: 8.18.3
-    transitivePeerDependencies:
-      - bufferutil
-      - utf-8-validate
-
-  '@effect/platform-node@0.68.2(@effect/platform@0.73.1(effect@3.17.9))(effect@3.17.9)':
-    dependencies:
-      '@effect/platform': 0.73.1(effect@3.17.9)
-      '@effect/platform-node-shared': 0.22.2(@effect/platform@0.73.1(effect@3.17.9))(effect@3.17.9)
-      effect: 3.17.9
-      mime: 3.0.0
-      undici: 7.15.0
       ws: 8.18.3
     transitivePeerDependencies:
       - bufferutil
@@ -1765,12 +1732,6 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - utf-8-validate
-
-  '@effect/platform@0.73.1(effect@3.17.9)':
-    dependencies:
-      effect: 3.17.9
-      find-my-way-ts: 0.1.6
-      multipasta: 0.2.7
 
   '@effect/platform@0.90.6(effect@3.17.9)':
     dependencies:

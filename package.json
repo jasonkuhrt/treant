@@ -15,7 +15,7 @@
     "build": "turbo run build",
     "format": "dprint fmt",
     "format:check": "dprint check",
-    "generate": "turbo run generate --filter=@treant/graphql-sdk",
+    "generate": "turbo run generate --filter=@treant/graphql",
     "dev": "turbo run dev",
     "ship:stage": "changeset",
     "ship:release": "tsx .changeset/ship.ts",

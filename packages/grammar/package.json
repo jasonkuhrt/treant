@@ -29,8 +29,8 @@
     "generate": "tsx scripts/generate-dsl/main"
   },
   "dependencies": {
-    "@effect/platform": "^0.73.1",
-    "@effect/platform-node": "^0.68.1",
+    "@effect/platform": "^0.90.6",
+    "@effect/platform-node": "^0.96.0",
     "@effect/schema": "^0.75.5",
     "effect": "^3.17.9",
     "tree-sitter-cli": "^0.25.8"

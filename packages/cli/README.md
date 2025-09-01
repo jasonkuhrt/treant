@@ -1,6 +1,6 @@
 # @treant/cli
 
-Command-line interface for Treant tree-sitter tools.
+Tree-sitter tools CLI.
 
 ## Installation
 
@@ -8,21 +8,36 @@ Command-line interface for Treant tree-sitter tools.
 npm install -g @treant/cli
 ```
 
-## Usage
+## Commands
 
-### Generate Library
+### `treant generate all`
 
-Generate a TypeScript SDK from a Tree-sitter grammar:
+Generate both grammar artifacts and TypeScript SDK with caching:
 
 ```bash
-treant generate library --grammar ./path/to/grammar/src --output ./src-generated
+treant generate all
 ```
 
 Options:
-- `--grammar, -g` - Path to directory containing grammar.json and node-types.json
-- `--output, -o` - Output directory (default: src-generated)
-- `--name, -n` - Display name override (e.g., "GraphQL")
+- `--grammar-dir` - Grammar source directory (default: `grammar`)
+- `--out-dir-grammar` - Grammar output directory (default: `grammar-build`)
+- `--out-dir-sdk` - SDK output directory (default: `sdk`)
+- `--force` - Force regeneration of both
+- `--force-grammar` - Force regeneration of grammar only
+- `--force-sdk` - Force regeneration of SDK only
 
-## Commands
+### `treant generate grammar`
 
-- `treant generate library` - Generate TypeScript SDK from Tree-sitter grammar
+Generate grammar artifacts from grammar.js:
+
+```bash
+treant generate grammar
+```
+
+### `treant generate library`
+
+Generate TypeScript SDK from grammar artifacts:
+
+```bash
+treant generate library --grammar ./grammar-build
+```

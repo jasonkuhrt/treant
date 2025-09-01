@@ -22,25 +22,27 @@
     ".": {
       "import": "./build/$$.js"
     },
-    "./assets/wasm": "./assets/grammar.wasm",
-    "./assets/grammar.json": "./assets/grammar.json",
-    "./assets/node-types.json": "./assets/node-types.json",
-    "./assets/queries/highlights.scm": "./assets/queries/highlights.scm",
-    "./assets/queries/formatter.scm": "./assets/queries/formatter.scm"
+    "./grammar/wasm": "./grammar-build/grammar.wasm",
+    "./grammar/grammar.json": "./grammar-build/grammar.json",
+    "./grammar/node-types.json": "./grammar-build/node-types.json",
+    "./grammar/queries/highlights.scm": "./grammar/queries/highlights.scm",
+    "./grammar/queries/formatter.scm": "./grammar/queries/formatter.scm"
   },
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && tsx scripts/copy-assets.ts",
+    "generate": "treant generate all --out-dir-sdk src",
+    "build": "pnpm generate && tsc -p tsconfig.build.json",
     "check:types": "tsc --noEmit"
   },
   "files": [
-    "build"
+    "build",
+    "grammar-build",
+    "grammar"
   ],
   "dependencies": {
-    "@treant/graphql-grammar": "workspace:*",
-    "@treant/graphql-sdk": "workspace:*",
     "web-tree-sitter": "^0.25.0"
   },
   "devDependencies": {
+    "@treant/cli": "workspace:*",
     "@treant/grammar": "workspace:*"
   },
   "publishConfig": {

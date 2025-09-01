@@ -1,6 +1,6 @@
 # @treant/graphql
 
-All-in-one GraphQL parser with TypeScript SDK.
+GraphQL parser with TypeScript SDK.
 
 ## Installation
 
@@ -23,12 +23,7 @@ const tree = await TreantGraphQL.Parser.parse(`
   }
 `);
 
-// Type-safe AST access
-if (TreantGraphQL.Node.isOperationDefinition(tree.rootNode)) {
-  console.log('Query operation');
-}
-
-// Navigate with type safety
+// Type-safe AST navigation
 const navigator = await TreantGraphQL.Navigator.create(tree);
 const fieldName = navigator
   .child() // to document
@@ -39,22 +34,10 @@ const fieldName = navigator
   ?.name();
 ```
 
-## What's Included
+## Exports
 
-- Pre-compiled WASM parser
-- Complete TypeScript SDK
-- Type guards for all node types
-- Type-safe navigation API
-- Tree traversal utilities
-- Grammar assets (JSON, query files)
-
-## Also Exports Assets
-
-```javascript
-// Access WASM and grammar files directly
-const wasmPath = require.resolve('@treant/graphql/assets/wasm');
-const grammarPath = require.resolve('@treant/graphql/assets/grammar.json');
-```
+- Main: TypeScript SDK via `@treant/graphql`
+- Grammar assets: `@treant/graphql/grammar/*`
 
 ## License
 

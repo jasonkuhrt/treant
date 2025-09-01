@@ -2,14 +2,11 @@
 node_modules
 .DS_Store
 
-# Generated parser files (in src/ as tree-sitter expects)
-packages/graphql-grammar/src/
-
 # Built WASM files
 *.wasm
-!packages/graphql-grammar-wasm/grammar.wasm
 
-# generated SDK
-packages/graphql-sdk/src-generated/
+# generated SDK and grammar
+packages/graphql/src-generated/
+packages/graphql/grammar-build/
 
 build/

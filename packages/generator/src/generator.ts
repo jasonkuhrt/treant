@@ -49,6 +49,18 @@ export interface GenerateOptions {
   grammar: Grammar.BuiltGrammar;
   nameOverride?: string;
   /**
+   * Path to WASM file relative to the generated SDK.
+   * If provided, the parser will load the WASM from this path instead of __artifacts__.
+   * @example "../grammar-build/grammar.wasm"
+   */
+  wasmPath?: string;
+  /**
+   * Whether to emit __artifacts__ directory with grammar.json and node-types.json.
+   * Useful for debugging but not needed in production.
+   * @default false
+   */
+  emitArtifacts?: boolean;
+  /**
    * Configuration for the exported namespace.
    * 
    * The prefix and name are concatenated according to the concatMode:
@@ -247,7 +259,7 @@ function concatenateNamespace(
  * Main generator function - pure, works with in-memory data
  */
 export async function generate(options: GenerateOptions): Promise<GeneratorOutput> {
-  const { grammar, nameOverride, namespace } = options;
+  const { grammar, nameOverride, namespace, wasmPath, emitArtifacts = false } = options;
   const { grammarJson, nodeTypes, wasm } = grammar;
 
   // Handle namespace configuration
@@ -374,7 +386,7 @@ export async function generate(options: GenerateOptions): Promise<GeneratorOutpu
   // Generate parser files
   files.push({
     path: 'parser/parser.ts',
-    content: generateParserFile(grammarName, grammarNamePascal),
+    content: generateParserFile(grammarName, grammarNamePascal, wasmPath),
   });
   files.push({
     path: 'parser/$$.ts',
@@ -412,34 +424,36 @@ export async function generate(options: GenerateOptions): Promise<GeneratorOutpu
     content: generateNamespaceExportFile(grammarNamespaceExport),
   });
 
-  // Add grammar artifacts for debugging
-  files.push({
-    path: '__artifacts__/grammar.json',
-    content: JSON.stringify(grammarJson, null, 2),
-  });
+  // Add grammar artifacts for debugging if requested
+  if (emitArtifacts) {
+    files.push({
+      path: '__artifacts__/grammar.json',
+      content: JSON.stringify(grammarJson, null, 2),
+    });
 
-  files.push({
-    path: '__artifacts__/node-types.json',
-    content: JSON.stringify(nodeTypes, null, 2),
-  });
+    files.push({
+      path: '__artifacts__/node-types.json',
+      content: JSON.stringify(nodeTypes, null, 2),
+    });
 
-  // If WASM is provided, add it to artifacts
-  if (wasm) {
-    if (typeof wasm === 'string') {
-      // If it's a path, read the file
-      const fs = await import('node:fs/promises');
-      const wasmBuffer = await fs.readFile(wasm);
-      files.push({
-        path: '__artifacts__/parser.wasm',
-        content: wasmBuffer,
-      });
-    }
-    else {
-      // It's already a buffer
-      files.push({
-        path: '__artifacts__/parser.wasm',
-        content: wasm,
-      });
+    // If WASM is provided, add it to artifacts
+    if (wasm) {
+      if (typeof wasm === 'string') {
+        // If it's a path, read the file
+        const fs = await import('node:fs/promises');
+        const wasmBuffer = await fs.readFile(wasm);
+        files.push({
+          path: '__artifacts__/parser.wasm',
+          content: wasmBuffer,
+        });
+      }
+      else {
+        // It's already a buffer
+        files.push({
+          path: '__artifacts__/parser.wasm',
+          content: wasm,
+        });
+      }
     }
   }
 
@@ -1391,7 +1405,8 @@ function generateNavigatorFile(
   return lines.join('\n');
 }
 
-function generateParserFile(grammarName: string, grammarNamePascal: string): string {
+function generateParserFile(grammarName: string, grammarNamePascal: string, wasmPath?: string): string {
+  const wasmImportPath = wasmPath || '../__artifacts__/parser.wasm';
   return `/**
  * Parser utilities for ${grammarName}
  * @generated
@@ -1402,7 +1417,7 @@ import type { Tree } from 'web-tree-sitter';
 
 /**
  * Create and initialize a parser for ${grammarName}.
- * Automatically loads the WASM grammar from the artifacts directory.
+ * Automatically loads the WASM grammar.
  */
 export async function create(): Promise<Parser> {
   // Initialize the Parser library once
@@ -1412,7 +1427,7 @@ export async function create(): Promise<Parser> {
   const parser = new Parser();
 
   // Load the WASM grammar
-  const wasmUrl = new URL('../__artifacts__/parser.wasm', import.meta.url);
+  const wasmUrl = new URL('${wasmImportPath}', import.meta.url);
   // Use pathname for Node.js (file://) or href for browser (http://)
   const wasmPath = wasmUrl.protocol === 'file:' ? wasmUrl.pathname : wasmUrl.href;
   const language = await Language.load(wasmPath);

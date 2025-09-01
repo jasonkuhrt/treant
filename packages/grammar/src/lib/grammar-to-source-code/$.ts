@@ -45,10 +45,11 @@ export const grammarToSourceCode = <RuleName extends string>(grammar: Grammar<Ru
     parts.push(`  word: ${grammar.word.toString()}`)
   }
   
-  // Generate CommonJS module for tree-sitter (it doesn't support ESM)
-  return `module.exports = grammar({
+  // Tree-sitter provides DSL functions as globals when evaluating the grammar
+  // No imports needed - just export the grammar call
+  return `export default grammar({
 ${parts.join(',\n')}
-})`
+});`
 }
 
 export * as GrammarToSourceCode from './$.js'
