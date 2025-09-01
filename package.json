@@ -12,6 +12,7 @@
     "url": "git+https://github.com/jasonkuhrt/treant.git"
   },
   "scripts": {
+    "build": "turbo run build",
     "format": "dprint fmt",
     "format:check": "dprint check",
     "generate": "turbo run generate --filter=@treant/graphql-sdk",
