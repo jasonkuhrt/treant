@@ -37,5 +37,8 @@
   "devDependencies": {
     "web-tree-sitter": "^0.25.8",
     "@treant/cli": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

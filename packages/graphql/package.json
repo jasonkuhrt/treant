@@ -42,5 +42,8 @@
   },
   "devDependencies": {
     "@treant/grammar": "workspace:*"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

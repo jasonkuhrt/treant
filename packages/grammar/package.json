@@ -34,5 +34,8 @@
     "@effect/schema": "^0.75.5",
     "effect": "^3.17.9",
     "tree-sitter-cli": "^0.25.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

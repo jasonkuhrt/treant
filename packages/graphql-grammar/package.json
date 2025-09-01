@@ -37,5 +37,8 @@
   "devDependencies": {
     "@treant/grammar": "workspace:*",
     "tree-sitter-cli": "^0.25.8"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }

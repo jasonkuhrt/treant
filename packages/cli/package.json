@@ -34,5 +34,8 @@
     "@treant/core": "workspace:*",
     "@treant/generator": "workspace:*",
     "effect": "^3.17.9"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
