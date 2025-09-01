@@ -1,6 +1,6 @@
 {
   "name": "@treant/graphql",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Complete GraphQL parser with TypeScript SDK - wraps grammar WASM and SDK for easy use",
   "type": "module",
   "author": "Jason Kuhrt",

@@ -1,6 +1,6 @@
 {
   "name": "@treant/core",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Core utilities for treant tree-sitter tools",
   "type": "module",
   "author": "Jason Kuhrt",
