@@ -1,6 +1,6 @@
 {
   "name": "@treant/generator",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "TypeScript SDK generator for tree-sitter grammars",
   "type": "module",
   "author": "Jason Kuhrt",
