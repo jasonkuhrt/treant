@@ -131,7 +131,22 @@ const fullRelease = Effect.gen(function*() {
   // Step 3: Commit
   yield* Console.log('\n▶ Committing version changes...');
   yield* exec('git add -A');
-  yield* exec('git commit -m "chore: version packages"');
+  
+  // Check if there are changes to commit
+  const hasChanges = yield* Effect.try(() => {
+    try {
+      execSync('git diff --cached --quiet', { stdio: 'pipe' });
+      return false; // No changes
+    } catch {
+      return true; // Has changes
+    }
+  });
+
+  if (hasChanges) {
+    yield* exec('git commit -m "chore: version packages"');
+  } else {
+    yield* Console.log('  No changes to commit');
+  }
 
   // Step 4: Publish
   yield* Console.log('\n▶ Publishing packages to npm...');
@@ -180,7 +195,7 @@ const cli = Command.run(shipCommand, {
 
 // Run the CLI
 pipe(
-  cli(process.argv.slice(2)),
+  cli(process.argv),
   Effect.provide(NodeContext.layer),
   NodeRuntime.runMain,
 );
