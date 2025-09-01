@@ -24,9 +24,8 @@
     }
   },
   "scripts": {
-    "generate": "treant generate library --grammar graphql",
+    "generate": "treant generate library --grammar ../graphql-grammar/src",
     "build": "pnpm run generate && tsc -p tsconfig.build.json",
-    "test": "vitest",
     "check:types": "tsc --noEmit"
   },
   "files": [

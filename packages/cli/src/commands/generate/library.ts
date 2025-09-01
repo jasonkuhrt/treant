@@ -1,13 +1,12 @@
 import { Command, Options as Os } from '@effect/cli';
-import { GeneratorSDK } from '@treant/generator-sdk';
+import { Generator } from '@treant/generator';
 import { Core } from '@treant/core';
-import { Console, Effect, Option, Schema } from 'effect';
-import { promptPathOrLiteral } from '../../lib/prompt-path-or-literal.js';
+import { Console, Effect, Option } from 'effect';
 
 export const libraryCommand = Command.make('library', {
   grammar: Os.text('grammar').pipe(
     Os.withAlias('g'),
-    Os.withDescription('Grammar name (e.g., "graphql") or directory path with grammar.json and node-types.json'),
+    Os.withDescription('Path to directory containing grammar.json and node-types.json (e.g., "./my-grammar/src")'),
     Os.optional,
   ),
   name: Os.text('name').pipe(
@@ -22,38 +21,31 @@ export const libraryCommand = Command.make('library', {
   ),
 }, (args) =>
   Effect.gen(function*() {
-    let grammarInputRaw = Option.getOrElse(args.grammar, () => '');
+    let grammarPath = Option.getOrElse(args.grammar, () => '');
 
-    // If no grammar specified, show interactive select
-    if (!grammarInputRaw) {
-      grammarInputRaw = yield* promptPathOrLiteral(Core.FirstPartyGrammars.GrammarInputSchema, {
-        selectMessage: 'Select a bundled grammar or choose custom:',
-        textMessage: 'Enter the path to your grammar directory:',
-        descriptionTransform: (literal) => `Use bundled ${literal} grammar`,
-        pathOption: {
-          description: 'Specify a directory path with grammar.json and node-types.json',
-        },
-      });
+    // If no grammar specified, prompt for path
+    if (!grammarPath) {
+      yield* Console.log('Please specify a grammar directory path using --grammar');
+      return yield* Effect.fail(new Error('Grammar path is required'));
     }
 
-    yield* Console.log(`Generating library for grammar: ${grammarInputRaw}`);
+    yield* Console.log(`Generating library for grammar: ${grammarPath}`);
 
-    // Parse the grammar input
-    const grammarInput = yield* Effect.try({
-      try: () => Schema.decodeUnknownSync(Core.FirstPartyGrammars.GrammarInputSchema)(grammarInputRaw),
-      catch: (error) => new Error(`Invalid grammar input: ${error}`),
-    });
+    // Validate grammar paths exist
+    yield* Core.FirstPartyGrammars.resolveGrammarPaths(grammarPath);
 
-    // Resolve grammar paths
-    const { grammarPath, nodeTypesPath, nameOverride } = yield* Core.FirstPartyGrammars.resolveGrammarPaths(grammarInput);
+    // Load the complete grammar using the helper
+    const grammar = yield* Effect.promise(() => Generator.loadGrammar(grammarPath));
 
     // Generate the SDK
-    yield* GeneratorSDK.generate({
-      grammarPath,
-      nodeTypesPath,
-      outputDir: args.output,
-      nameOverride: Option.getOrUndefined(args.name) || nameOverride,
-    });
+    const nameOverrideOption = Option.getOrUndefined(args.name);
+    const sdk = yield* Effect.promise(() => Generator.generate({
+      grammar,
+      ...(nameOverrideOption ? { nameOverride: nameOverrideOption } : {}),
+    }));
+
+    // Emit the SDK files
+    yield* Effect.promise(() => Generator.emit(sdk, args.output));
 
     yield* Console.log(`SDK generated successfully in ${args.output}`);
   }));

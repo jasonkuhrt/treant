@@ -1,19 +1,7 @@
-import { readFileSync } from 'node:fs';
-import { Language, type Node, Parser } from 'web-tree-sitter';
-import { getWasmPath } from '@treant/graphql';
+import { parse, TreantGraphQL } from '../src/$.js';
 
-// Initialize the parser
-await Parser.init();
-const parser = new Parser();
-
-// Load the GraphQL grammar using the wrapper package helper
-const wasmPath = getWasmPath();
-const wasmBuffer = readFileSync(wasmPath);
-const GraphQL = await Language.load(wasmBuffer);
-parser.setLanguage(GraphQL);
-
-// Parse GraphQL code
-const tree = parser.parse(`
+// Parse GraphQL code using the simplified API
+const tree = await parse(`
     query GetUser($id: ID!) {
       user(id: $id) {
         name
@@ -37,7 +25,11 @@ console.log('Root node:', tree.rootNode.type);
 console.log('Full tree:', tree.rootNode.toString());
 
 // Find specific nodes
-function findNodes(node: Node, type: string, results: Node[] = []): Node[] {
+function findNodes(
+  node: TreantGraphQL.Node.Node,
+  type: string,
+  results: TreantGraphQL.Node.Node[] = [],
+): TreantGraphQL.Node.Node[] {
   if (node.type === type) {
     results.push(node);
   }

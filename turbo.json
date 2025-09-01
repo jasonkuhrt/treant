@@ -16,9 +16,14 @@
       "cache": false
     },
     "check:types": {
-      "dependsOn": ["build"],
+      "dependsOn": ["^build"],
       "outputs": [],
       "cache": true
+    },
+    "check": {
+      "dependsOn": ["check:types", "test"],
+      "outputs": [],
+      "cache": false
     },
     "dev": {
       "cache": false,

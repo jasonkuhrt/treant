@@ -14,16 +14,19 @@
     "displayName": "GraphQL"
   },
   "files": [
-    "src"
+    "src",
+    "grammar.wasm"
   ],
   "exports": {
     "./package.json": "./package.json",
     "./grammar.json": "./src/grammar.json",
-    "./node-types.json": "./src/node-types.json"
+    "./node-types.json": "./src/node-types.json",
+    "./wasm": "./grammar.wasm"
   },
   "scripts": {
-    "build": "tree-sitter generate grammar.js",
-    "clean": "rm -rf src"
+    "build": "tree-sitter generate grammar.js && pnpm build:wasm",
+    "build:wasm": "tree-sitter build --docker --wasm --output grammar.wasm .",
+    "clean": "rm -rf src grammar.wasm"
   },
   "devDependencies": {
     "@treant/grammar": "workspace:*",

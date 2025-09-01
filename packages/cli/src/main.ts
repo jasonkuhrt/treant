@@ -20,4 +20,6 @@ const main = Command.run(mainCommand, {
   Effect.scoped,
 );
 
-NodeRuntime.runMain(main);
+NodeRuntime.runMain(main, {
+  disableErrorReporting: false,
+});

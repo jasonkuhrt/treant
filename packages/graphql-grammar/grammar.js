@@ -1,15 +1,8 @@
 import { Grammar } from "@treant/grammar";
-import {
-  repeat1,
-  choice,
-  repeat,
-  seq,
-  optional,
-  prec,
-  token,
-} from "@treant/grammar/grammar";
 
-export default Grammar.grammar({
+const { repeat1, choice, repeat, seq, optional, prec, token, grammar } = Grammar.Rules;
+
+export default grammar({
   name: "graphql",
 
   extras: ($) => [

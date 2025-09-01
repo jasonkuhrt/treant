@@ -59,9 +59,9 @@ importers:
       '@treant/core':
         specifier: workspace:*
         version: link:../core
-      '@treant/generator-sdk':
+      '@treant/generator':
         specifier: workspace:*
-        version: link:../generator-sdk
+        version: link:../generator
       effect:
         specifier: ^3.17.9
         version: 3.17.9
@@ -78,7 +78,7 @@ importers:
         specifier: ^3.17.9
         version: 3.17.9
 
-  packages/generator-sdk:
+  packages/generator:
     dependencies:
       '@dprint/formatter':
         specifier: ^0.4.1
@@ -123,9 +123,9 @@ importers:
 
   packages/graphql:
     dependencies:
-      '@treant/graphql-grammar-wasm':
+      '@treant/graphql-grammar':
         specifier: workspace:*
-        version: link:../graphql-grammar-wasm
+        version: link:../graphql-grammar
       '@treant/graphql-sdk':
         specifier: workspace:*
         version: link:../graphql-sdk
@@ -142,12 +142,6 @@ importers:
       '@treant/grammar':
         specifier: workspace:*
         version: link:../grammar
-      tree-sitter-cli:
-        specifier: ^0.25.8
-        version: 0.25.8
-
-  packages/graphql-grammar-wasm:
-    devDependencies:
       tree-sitter-cli:
         specifier: ^0.25.8
         version: 0.25.8

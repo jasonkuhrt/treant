@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { Language, Parser, Tree } from 'web-tree-sitter';
-import { getWasmPath } from './wasm.js';
 
 export let parser: Parser | null = null;
 export let language: Language | null = null;
@@ -14,7 +14,8 @@ export async function initializeParser(): Promise<void> {
   await Parser.init();
   parser = new Parser();
 
-  const wasmPath = getWasmPath();
+  const wasmUrl = import.meta.resolve('@treant/graphql-grammar/wasm');
+  const wasmPath = fileURLToPath(wasmUrl);
   const wasmBuffer = readFileSync(wasmPath);
   language = await Language.load(wasmBuffer);
   parser.setLanguage(language);

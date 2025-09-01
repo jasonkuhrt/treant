@@ -1,7 +1,7 @@
-import { describe, expect, test } from 'vitest';
-import { generate } from '../src/generate.js';
 import { NodeContext } from '@effect/platform-node';
 import { Effect } from 'effect';
+import { describe, expect, test } from 'vitest';
+import { build } from '../src/build.js';
 
 describe('WASM generation', () => {
   test('generates WASM file when wasm option is true', async () => {
@@ -13,21 +13,12 @@ describe('WASM generation', () => {
       },
     };
 
-    const result = await generate(grammar, { wasm: true }).pipe(
+    const result = await build(grammar, { wasm: true }).pipe(
       Effect.scoped,
       Effect.provide(NodeContext.layer),
       Effect.runPromise,
     );
-
-    // Check that standard artifacts are present
-    expect(result['grammar.json']).toBeDefined();
-    expect(result['node-types.json']).toBeDefined();
-    expect(result['parser.c']).toBeDefined();
-    
-    // Check that WASM file is present
-    expect(result['parser.wasm']).toBeDefined();
-    expect(result['parser.wasm']).toBeInstanceOf(Uint8Array);
-    expect(result['parser.wasm']?.length).toBeGreaterThan(0);
+    expect(result).toMatchSnapshot();
   });
 
   test('does not generate WASM file when wasm option is false', async () => {
@@ -39,19 +30,19 @@ describe('WASM generation', () => {
       },
     };
 
-    const result = await generate(grammar, { wasm: false }).pipe(
+    const result = await build(grammar, { wasm: false }).pipe(
       Effect.scoped,
       Effect.provide(NodeContext.layer),
       Effect.runPromise,
     );
 
     // Check that standard artifacts are present
-    expect(result['grammar.json']).toBeDefined();
-    expect(result['node-types.json']).toBeDefined();
-    expect(result['parser.c']).toBeDefined();
-    
+    expect(result.grammarJson).toBeDefined();
+    expect(result.nodeTypes).toBeDefined();
+    expect(result.parserC).toBeDefined();
+
     // Check that WASM file is NOT present
-    expect(result['parser.wasm']).toBeUndefined();
+    expect(result.wasm).toBeUndefined();
   });
 
   test('does not generate WASM file when wasm option is not specified', async () => {
@@ -62,18 +53,18 @@ describe('WASM generation', () => {
       },
     };
 
-    const result = await generate(grammar).pipe(
+    const result = await build(grammar).pipe(
       Effect.scoped,
       Effect.provide(NodeContext.layer),
       Effect.runPromise,
     );
 
     // Check that standard artifacts are present
-    expect(result['grammar.json']).toBeDefined();
-    expect(result['node-types.json']).toBeDefined();
-    expect(result['parser.c']).toBeDefined();
-    
+    expect(result.grammarJson).toBeDefined();
+    expect(result.nodeTypes).toBeDefined();
+    expect(result.parserC).toBeDefined();
+
     // Check that WASM file is NOT present by default
-    expect(result['parser.wasm']).toBeUndefined();
+    expect(result.wasm).toBeUndefined();
   });
 });

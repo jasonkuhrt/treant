@@ -16,7 +16,7 @@ Note: `web-tree-sitter` is a peer dependency.
 import { Parser } from 'web-tree-sitter';
 import { Node, Utils, Cursor } from '@treant/graphql-sdk';
 
-// Parse (see @treant/graphql-grammar-wasm for parser setup)
+// Parse (see @treant/graphql-grammar for parser setup)
 const tree = parser.parse(`query { user { name } }`);
 
 // Type guards
